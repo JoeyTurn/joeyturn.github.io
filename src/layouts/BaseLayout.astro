@@ -1,0 +1,41 @@
+---
+const { title = "Joey Turnbull" } = Astro.props;
+---
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{title}</title>
+    <!-- ...existing meta... -->
+    <!-- <link rel="icon" href="/favicon.svg" type="image/svg+xml" /> -->
+    <link rel="icon" href="/happyfrog.png" sizes="any" />
+    <link rel="apple-touch-icon" href="/happyfrog.png" />
+    <link rel="manifest" href="/site.webmanifest" />
+    <meta name="theme-color" content="#eee6d7" />
+
+    <style>
+      :root { --bg:#eee6d7; --text:#0a0a0a; }
+      html, body { margin:0; padding:0; }
+      body { font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial; color: var(--text); background: var(--bg); line-height: 1.6; }
+      header { display:flex; align-items:center; justify-content:space-between; padding:16px 24px; }
+      header a { color:inherit; text-decoration:none; font-weight:600; }
+      nav a { margin-left:24px; }
+      main { max-width:1100px; margin:0 auto; padding:24px; }
+      h1 { font-size:clamp(36px,6vw,64px); margin:24px 0; }
+      h2 { font-size:32px; margin-top:32px; }
+      ul { padding-left:24px; }
+    </style>
+  </head>
+  <body>
+    <header>
+      <a href="/">Joey Turnbull</a>
+      <nav>
+        <a href="/projects">Projects</a>
+        <a href="/blog">Blog</a>
+      </nav>
+    </header>
+    <main>
+      <slot />
+    </main>
+  </body>
+</html>

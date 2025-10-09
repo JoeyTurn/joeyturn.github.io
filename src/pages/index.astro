@@ -1,0 +1,29 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import { getCollection } from "astro:content";
+
+const blog = (await getCollection("blog")).filter(p => !p.data.draft);
+const projects = (await getCollection("projects")).filter(p => !p.data.draft);
+---
+<BaseLayout>
+  <h1>Joey Turnbull</h1>
+
+  <p>
+    Hello! I'm a physics graduate student at UC Berkeley who studies how neural
+    networks train. I'll add more to this when Astro isn't destroying my projects page at 3am.
+  </p>
+
+  <h2>Blog</h2>
+  <ul>
+    {blog.map(({ slug, data }) => (
+      <li><a href={`/blog/${slug}/`}>{data.title}</a></li>
+    ))}
+  </ul>
+
+  <h2>Projects</h2>
+  <ul>
+    {projects.map(({ slug, data }) => (
+      <li><a href={`/projects/${slug}/`}>{data.title}</a></li>
+    ))}
+  </ul>
+</BaseLayout>

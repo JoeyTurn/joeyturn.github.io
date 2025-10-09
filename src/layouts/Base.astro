@@ -1,0 +1,45 @@
+---
+import Header from "../components/Header.astro";
+const {
+  title = "My Site",
+  description = "Personal site",
+  homeText = "Joey Turnbull",            // customize
+} = Astro.props;
+---
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>{title}</title>    <!-- (2) Tab title / tooltip -->
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="description" content={description} />
+    <!-- (3) Favicon / tab image -->
+    <!-- <link rel="icon" href="/favicon.svg" type="image/svg+xml" /> -->
+    <link rel="icon" href="/happyfrog.png" sizes="128x128" />
+    <link rel="apple-touch-icon" href="/happyfrog.png" />
+    <meta name="theme-color" content="#eae3d6" />
+    <style>
+      :root{
+        /* (4) Colors */
+        --bg:    #c4beb1;   /* soft tan background */
+        --text:  #1c1c1c;   /* main text */
+        --brand: #011f29;   /* header left title color */
+        --border:#c5bdac;
+      }
+      html,body{ height:100%; }
+      body{
+        margin:0;
+        background: var(--bg);
+        color: var(--text);
+        font: 16px/1.55 system-ui, -apple-system, Segoe UI, Roboto, Inter, Arial, sans-serif;
+      }
+      .container{ max-width: 860px; margin: 0 auto; padding: 1rem; }
+    </style>
+  </head>
+  <body>
+    <Header homeText={homeText} />
+    <div class="container">
+      <slot />
+    </div>
+  </body>
+</html>
+

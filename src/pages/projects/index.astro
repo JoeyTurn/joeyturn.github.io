@@ -1,0 +1,13 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import { getCollection } from "astro:content";
+const items = (await getCollection("projects")).filter(p => !p.data.draft);
+---
+<BaseLayout title="Projects – Joey Turnbull">
+  <h1>Projects</h1>
+  <ul>
+    {items.map(({ slug, data }) => (
+      <li><a href={`/projects/${slug}/`}>{data.title}</a></li>
+    ))}
+  </ul>
+</BaseLayout>

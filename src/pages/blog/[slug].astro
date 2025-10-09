@@ -1,0 +1,20 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import { getCollection, getEntry } from "astro:content";
+
+// 1) Tell Astro which /blog/* pages to build
+export async function getStaticPaths() {
+  const posts = await getCollection("blog", ({ data }) => !data.draft);
+  return posts.map(({ slug }) => ({ params: { slug } }));
+}
+
+// 2) Load the specific entry for this slug
+const { slug } = Astro.params;
+const entry = await getEntry("blog", slug!);
+if (!entry) throw new Error(`Blog post not found: ${slug}`);
+const { Content } = await entry.render();
+---
+<BaseLayout title={`${entry.data.title} – Blog`}>
+  <h1>{entry.data.title}</h1>
+  <Content />
+</BaseLayout>
