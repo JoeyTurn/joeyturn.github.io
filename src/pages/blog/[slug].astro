@@ -1,17 +1,19 @@
 ---
 import BaseLayout from "../../layouts/BaseLayout.astro";
-import { getCollection, getEntry } from "astro:content";
+import type { CollectionEntry } from "astro:content";
+import { getCollection } from "astro:content";
 
-// 1) Tell Astro which /blog/* pages to build
+// Build-time: enumerate paths and pass the entry via props
 export async function getStaticPaths() {
   const posts = await getCollection("blog", ({ data }) => !data.draft);
-  return posts.map(({ slug }) => ({ params: { slug } }));
+  return posts.map((entry) => ({
+    params: { slug: entry.slug },   // <-- MUST include "slug"
+    props: { entry },               // pass the whole entry
+  }));
 }
 
-// 2) Load the specific entry for this slug
-const { slug } = Astro.params;
-const entry = await getEntry("blog", slug!);
-if (!entry) throw new Error(`Blog post not found: ${slug}`);
+// Per-page: receive the entry directly (no need to look it up again)
+const { entry } = Astro.props as { entry: CollectionEntry<"blog"> };
 const { Content } = await entry.render();
 ---
 <BaseLayout title={`${entry.data.title} – Blog`}>
