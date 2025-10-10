@@ -4,26 +4,59 @@ import { getCollection } from "astro:content";
 
 const blog = (await getCollection("blog")).filter(p => !p.data.draft);
 const projects = (await getCollection("projects")).filter(p => !p.data.draft);
+const norm = (u:string) => /^https?:\/\//i.test(u) ? u : `https://${u}`;
 ---
 <BaseLayout>
-  <h1>Joey Turnbull</h1>
+	<h1>Joey Turnbull</h1>
 
-  <p>
-    Hello! I'm a physics graduate student at UC Berkeley who studies how neural
-    networks train. I'll add more to this when Astro isn't destroying my projects page at 3am.
-  </p>
+  	<p>
+		Hello! I'm a physics graduate student at UC Berkeley who studies how neural
+		networks train. I'm a member of <a href="https://james-simon.github.io/">Jamie Simon's</a> "Feature Lab," which is graciously funded by <a href="imbue.com">Imbue</a>, where we're
+		working towards a theory of how MLPs learn. I did my undergrad at the University of Washington in physics, where I worked in a number of experimental subfields
+		(biophysics, gravitation, high-energy, and condensed matter).
 
-  <h2>Blog</h2>
-  <ul>
-    {blog.map(({ slug, data }) => (
-      <li><a href={`/blog/${slug}/`}>{data.title}</a></li>
-    ))}
-  </ul>
+		<br><br>
+		In my free time, I am an amateur weightlifter/runner (I occasionally update my PBs <a href=/personal>here</a>), an <a href="https://en.wikipedia.org/wiki/Atomic_chess">atomic chess</a> fiend who has a near perfect OTB record as black,
+		a poet, and enjoy frolicking in the rain!
+  	</p>
 
-  <h2>Projects</h2>
-  <ul>
+	<hr class="section-hr" />
+
+	<h2><a href="/projects">Projects</a></h2>
+	<!-- <hr class="section-hr" /> -->
+	<ul class="projlist">
     {projects.map(({ slug, data }) => (
-      <li><a href={`/projects/${slug}/`}>{data.title}</a></li>
+      <li>
+        <a class="projtitle" href={`/projects/${slug}/`}>{data.title}</a>
+
+        {data.links && data.links.length > 0 && (
+          <div class="externals">
+            {data.links.map((L, i) => (
+              <>
+                <a href={norm(L.url)} target="_blank" rel="noopener noreferrer">{L.label}</a>
+                {i < data.links!.length - 1 && <span class="dot">·</span>}
+              </>
+            ))}
+          </div>
+        )}
+      </li>
     ))}
-  </ul>
+  	</ul>
+
+	<hr class="section-hr" />
+
+	<h2><a href="/blog">Blog</a></h2>
+	<p>(Currently being worked on, please check back later.)</p>
+	<!-- <hr class="section-hr" /> -->
+	<ul>
+		{blog.map(({ slug, data }) => (
+		<li><a href={`/blog/${slug}/`}>{data.title}</a></li>
+		))}
+	</ul>
+
+	<!-- <ul>
+		{projects.map(({ slug, data }) => (
+		<li><a href={`/projects/${slug}/`}>{data.title}</a></li>
+		))}
+	</ul> -->
 </BaseLayout>

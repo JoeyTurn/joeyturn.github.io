@@ -3,7 +3,7 @@ import BaseLayout from "../../layouts/BaseLayout.astro";
 import { getCollection } from "astro:content";
 const items = (await getCollection("projects")).filter(p => !p.data.draft);
 ---
-<BaseLayout title="Projects – Joey Turnbull">
+<BaseLayout title="Joey Turnbull - Projects">
   <h1>Projects</h1>
   <ul>
     {items.map(({ slug, data }) => (
@@ -11,3 +11,4 @@ const items = (await getCollection("projects")).filter(p => !p.data.draft);
     ))}
   </ul>
 </BaseLayout>
+

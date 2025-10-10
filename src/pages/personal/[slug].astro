@@ -3,12 +3,11 @@ import BaseLayout from "../../layouts/BaseLayout.astro";
 import type { CollectionEntry } from "astro:content";
 import { getCollection } from "astro:content";
 
-// Build-time: enumerate blog pages and ALSO compute prev/next within a series.
 export async function getStaticPaths() {
-  const posts = await getCollection("blog", ({ data }) => !data.draft);
+  const posts = await getCollection("personal", ({ data }) => !data.draft);
 
   // group by series; if no series -> unique key so it won't page
-  const groups = new Map<string, CollectionEntry<"blog">[]>();
+  const groups = new Map<string, CollectionEntry<"personal">[]>();
   for (const p of posts) {
     const key = p.data.series ?? `__noseries__${p.slug}`;
     (groups.get(key) ?? groups.set(key, []).get(key)!).push(p);
@@ -18,9 +17,9 @@ export async function getStaticPaths() {
   const paths: Array<{
     params: { slug: string };
     props: {
-      entry: CollectionEntry<"blog">;
-      prev?: CollectionEntry<"blog">;
-      next?: CollectionEntry<"blog">;
+      entry: CollectionEntry<"personal">;
+      prev?: CollectionEntry<"personal">;
+      next?: CollectionEntry<"personal">;
     };
   }> = [];
 
@@ -46,9 +45,9 @@ export async function getStaticPaths() {
 
 // Receive the entry and neighbors directly
 const { entry, prev, next } = Astro.props as {
-  entry: CollectionEntry<"blog">;
-  prev?: CollectionEntry<"blog">;
-  next?: CollectionEntry<"blog">;
+  entry: CollectionEntry<"personal">;
+  prev?: CollectionEntry<"personal">;
+  next?: CollectionEntry<"personal">;
 };
 
 // simple date formatter
@@ -60,7 +59,7 @@ function formatDate(d?: Date) {
 
 const { Content } = await entry.render();
 ---
-<BaseLayout title={`${entry.data.title} – Blog`}>
+<BaseLayout title={`${entry.data.title} – personal`}>
   <h1>{entry.data.title}</h1>
   <h3>{entry.data.description && (
     <p class="subtitle">{entry.data.description}</p>
@@ -70,8 +69,8 @@ const { Content } = await entry.render();
 
   {(entry.data.series && (prev || next)) && (
     <nav class="pager" aria-label={`Series: ${entry.data.series}`}>
-      <div>{prev && <a href={`/blog/${prev.slug}/`}>← {prev.data.title}</a>}</div>
-      <div>{next && <a href={`/blog/${next.slug}/`}>{next.data.title} →</a>}</div>
+      <div>{prev && <a href={`/personal/${prev.slug}/`}>← {prev.data.title}</a>}</div>
+      <div>{next && <a href={`/personal/${next.slug}/`}>{next.data.title} →</a>}</div>
     </nav>
   )}
 </BaseLayout>

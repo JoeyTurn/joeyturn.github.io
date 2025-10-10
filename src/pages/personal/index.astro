@@ -3,11 +3,12 @@ import BaseLayout from "../../layouts/BaseLayout.astro";
 import { getCollection } from "astro:content";
 const posts = (await getCollection("blog")).filter(p => !p.data.draft);
 ---
-<BaseLayout title="Joey Turnbull - Blog">
-  <h1>Blog</h1>
+<BaseLayout title="Joey Turnbull - Personal">
+  <h1>Personal</h1>
   <ul>
     {posts.map(({ slug, data }) => (
-      <li><a href={`/blog/${slug}/`}>{data.title}</a></li>
+      <li><a href={`/personal/${slug}/`}>{data.title}</a></li>
     ))}
   </ul>
+  <p>Come back later for more details!</p>
 </BaseLayout>
