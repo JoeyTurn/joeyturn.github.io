@@ -5,7 +5,7 @@ const blog = defineCollection({
     schema: z.object({
         title: z.string(),
         pubDate: z.coerce.date().optional(),
-        // pubDate: z.string().optional(),   // keep it minimal
+        onlylink: z.boolean().optional(),
         draft: z.boolean().optional(),
         series: z.string().optional(),            // e.g., "Diffusion 101"
         seriesOrder: z.number().optional(),
@@ -18,7 +18,7 @@ const projects = defineCollection({
     schema: z.object({
         title: z.string(),
         pubDate: z.coerce.date().optional(),
-        // pubDate: z.string().optional(),
+        onlylink: z.boolean().optional(),
         draft: z.boolean().optional(),
         series: z.string().optional(),            // e.g., "Diffusion 101"
         seriesOrder: z.number().optional(),
@@ -39,7 +39,7 @@ const personal = defineCollection({
     schema: z.object({
         title: z.string(),
         pubDate: z.coerce.date().optional(),
-        // pubDate: z.string().optional(),
+        onlylink: z.boolean().optional(),
         draft: z.boolean().optional(),
         series: z.string().optional(),            // e.g., "Diffusion 101"
         seriesOrder: z.number().optional(),

@@ -59,7 +59,7 @@ function formatDate(d?: Date) {
 
 const { Content } = await entry.render();
 ---
-<BaseLayout title={`${entry.data.title} – personal`}>
+<BaseLayout title={`${entry.data.title} – personal`} noindex={Boolean(entry.data.onlylink)}>
   <h1>{entry.data.title}</h1>
   <h3>{entry.data.description && (
     <p class="subtitle">{entry.data.description}</p>

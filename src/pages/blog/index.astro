@@ -1,7 +1,9 @@
 ---
 import BaseLayout from "../../layouts/BaseLayout.astro";
 import { getCollection } from "astro:content";
-const posts = (await getCollection("blog")).filter(p => !p.data.draft);
+const posts = (await getCollection("blog"))
+  .filter(p => !p.data.draft && !p.data.onlylink)
+  .sort((a,b)=>(b.data.pubDate?.getTime?.() ?? 0)-(a.data.pubDate?.getTime?.() ?? 0));
 ---
 <BaseLayout title="Joey Turnbull - Blog">
   <h1>Blog</h1>

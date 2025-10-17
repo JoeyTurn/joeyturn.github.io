@@ -23,7 +23,7 @@ function norm(url: string) {
 
 // Build-time: enumerate project pages and compute prev/next within same series.
 export async function getStaticPaths() {
-  const items = await getCollection("projects", ({ data }) => !data.draft);
+  const items = await getCollection("projects", ({ data }) => !data.draft || data.onlylink);
 
   // group by series; items without series get unique keys to avoid paging
   const groups = new Map<string, CollectionEntry<"projects">[]>();

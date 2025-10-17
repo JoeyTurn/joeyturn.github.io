@@ -5,7 +5,7 @@ import { getCollection } from "astro:content";
 
 // Build-time: enumerate blog pages and ALSO compute prev/next within a series.
 export async function getStaticPaths() {
-  const posts = await getCollection("blog", ({ data }) => !data.draft);
+  const posts = await getCollection("blog", ({ data }) => !data.draft || data.onlylink);
 
   // group by series; if no series -> unique key so it won't page
   const groups = new Map<string, CollectionEntry<"blog">[]>();
@@ -60,7 +60,7 @@ function formatDate(d?: Date) {
 
 const { Content } = await entry.render();
 ---
-<BaseLayout title={`${entry.data.title} – Blog`}>
+<BaseLayout title={`${entry.data.title} – Blog`} noindex={Boolean(entry.data.onlylink)}>
   <h1>{entry.data.title}</h1>
   <h3>{entry.data.description && (
     <p class="subtitle">{entry.data.description}</p>
