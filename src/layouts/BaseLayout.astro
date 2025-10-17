@@ -37,6 +37,21 @@ const { title = "Joey Turnbull", noindex = false } = Astro.props;
             padding-top:16px; border-top:1px solid var(--rule);
         } */
         .meta { opacity:.7; font-size:.95rem; margin:.5rem 0 1.25rem; }
+
+        .references { 
+        margin-top: 1.75rem;
+        font-size: 0.98rem;
+        }
+        .references ol { margin: 0; padding-left: 1.25rem; }
+        .references li { margin: 0 0 0.8rem 0; line-height: 1.5; }
+        .references > * + * { margin-top: 0.8rem; }
+        .references li {
+        list-style-position: outside;
+        padding-left: 1.5rem;      /* indent text */
+        text-indent: -1.5rem;      /* pull number back out */
+        }
+        .references a { word-break: break-word; }
+
     </style>
   </head>
   <body>

@@ -10,6 +10,7 @@
   },
   "dependencies": {
     "astro": "^5.14.3",
+    "citation-js": "^0.7.20",
     "katex": "^0.16.23",
     "rehype-citation": "^2.3.1",
     "rehype-katex": "^7.0.1",
