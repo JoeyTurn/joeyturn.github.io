@@ -44,18 +44,18 @@ If that is true, then why does \citep{dominé2025lazyrichexactlearning} have a s
 
 $$
 \begin{equation}
-    \text{At init, }\tau_a\mathbf{a}^\top \mathbf{a} - \tau_W WW^\top = \lambda I_w,
+    \text{At init, } \frac{1}{\eta_a}\mathbf{a}^\top \mathbf{a} - \frac{1}{\eta_W} WW^\top = \lambda I_w.
 \end{equation}
 $$
 </div>
 
-where $\tau_{a} \equiv 1/(\eta_{a})$, $\tau_{W} \equiv 1/(\eta_{W})$. A proof for this quantity remaining invariant can be found in both \citep{kunin2024richquickexactsolutions} and [below](#conserved). With Gaussian initialization, this conserved equation is trivially achieved when the width w is large, making
+A proof for this quantity remaining invariant can be found in both \citep{kunin2024richquickexactsolutions} and [below](#conserved). With Gaussian initialization, this conserved equation is trivially achieved when the width w is large, making
 
 $$
 \begin{equation*}
     % \mathbf{a}^\top\mathbf{a} &\sim d_{out}\sigma_a^2 I_w\\
     % WW^\top &\sim d\sigma_W^2 I_w\\
-    \tau_a\mathbf{a}^\top\mathbf{a}-\tau_WWW^\top\sim\left(\tau_a d_{out}\sigma_a^2-\tau_W d\sigma_W^2\right)I_w \equiv \lambda I_w,
+    \frac{1}{\eta_a}\mathbf{a}^\top\mathbf{a}-\frac{1}{\eta_W}WW^\top\sim\left(\frac{1}{\eta_a} d_{out}\sigma_a^2-\frac{1}{\eta_W} d\sigma_W^2\right)I_w \equiv \lambda I_w,
 \end{equation*}
 $$
 
@@ -65,7 +65,7 @@ While our solution space for feature learning is quite large, with 3 different i
 
 $$
 \begin{equation*}
-    \lambda = \tau_a d_{out}\sigma_a^2 - \tau_W d\sigma_W^2 = \frac{d_{out}}{\eta_a}\sigma_a^2 - \frac{d}{\eta_W}\sigma_W^2 \leq \epsilon
+    \lambda = \frac{1}{\eta_a} d_{out}\sigma_a^2 - \frac{1}{\eta_W} d\sigma_W^2 = \frac{d_{out}}{\eta_a}\sigma_a^2 - \frac{d}{\eta_W}\sigma_W^2 \leq \epsilon
 \end{equation*}
 $$
 
@@ -76,11 +76,11 @@ For completeness, let's plug in the $\mu$P scaling laws to see how small $\lambd
 
 $$
 \begin{equation*}
-    \lambda = \Theta\left(\frac{w}{d_{out}}d_{out}\frac{d_{out}}{w^2}-\frac{d}{w}d\frac{1}{d}\right)=\Theta\left(\frac{d_{out}}{w}-\frac{d}{w}\right)=\Theta \left(\frac{d_{out}-d}{w}\right)
+    \lambda = \Theta\left(\frac{w}{d_{out}}d_{out}\frac{d_{out}}{w^2}-\frac{d}{w}d\frac{1}{d}\right)=\frac{f_2d_{out}}{w}-\frac{f_1d}{w}=\frac{f_2d_{out}-f_1d}{w}
 \end{equation*}
 $$
 
-which tends towards 0 as $w\rightarrow \infty$ and tells us that any scaling done to $d$ XOR $d_{out}$ should be reflected in an equivalent change to $w$: $w \sim d(_{out})$.
+where $f_2$ and $f_1$ represent scalars that are $\Theta(1)$ with respect to the width. This quantity tends towards 0 as $w\rightarrow \infty$ and tells us that any scaling done to $d$ XOR $d_{out}$ should be reflected in an equivalent change to $w$: $w \sim d(_{out})$.
 
 ### Lazy & ultra-rich scaling
 
@@ -91,8 +91,8 @@ Taking from the MFP literature, if we scale our network outputs as $ f \mapsto f
 $$
 \lambda \sim
 \begin{cases}
-  \left(\tau_a d_{out}\sigma_a^2-\tau_W d\sigma_W^2\right)/\gamma^2, & \gamma \leq 1\\
-  \left(\tau_a d_{out}\sigma_a^2-\tau_W d\sigma_W^2\right)/\gamma, & \gamma \text{ > } 1.
+  \left(\frac{1}{\eta_a} d_{out}\sigma_a^2-\frac{1}{\eta_W} d\sigma_W^2\right)/\gamma^2, & \gamma \leq 1\\
+  \left(\frac{1}{\eta_a} d_{out}\sigma_a^2-\frac{1}{\eta_W} d\sigma_W^2\right)/\gamma, & \gamma \text{ > } 1.
 \end{cases}
 $$
 
@@ -150,7 +150,7 @@ If we want to consider deeper networks, the story is largely the same. Take $Y=W
 
 $$
 \begin{equation*}
-\tau_{\ell+1}W_{\ell+1}^\top W_{\ell+1}-\tau_{\ell+1}W_{\ell} W_{\ell}^\top = \lambda_\ell I_{w_\ell}
+\frac{1}{\eta_{\ell+1}}W_{\ell+1}^\top W_{\ell+1}-\frac{1}{\eta_\ell}W_{\ell} W_{\ell}^\top = \lambda_\ell I_{w_\ell}
 \end{equation*}
 $$ 
 
@@ -162,7 +162,7 @@ $$
 \end{equation*}
 $$
 
-while we can't generally compare $\tau_i W_{i}^\top W_{i} - \tau_j W_{j} W_{j}^\top$ ($j \neq i-1$) due to possible shape inconsistency, we can say
+while we can't generally compare $\frac{1}{\eta_i} W_{i}^\top W_{i} - \frac{1}{\eta_j} W_{j} W_{j}^\top$ ($j \neq i-1$) due to possible shape inconsistency, we can say
 
 $$
 \begin{equation*}
@@ -171,6 +171,8 @@ $$
 $$
 
 with the implication being that there is a general balancedness between all layers that feature learning networks satisfy: the $i$-th singular values of all layers in a feature learning network are all roughly equivalent.
+
+## Takeaway
 
 ## Appendix
 
