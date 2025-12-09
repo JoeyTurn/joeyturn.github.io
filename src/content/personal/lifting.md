@@ -7,5 +7,3 @@ seriesOrder: 1
 draft: true
 ---
 
-
-Early in the days of my PhD, [Dhruva Karkada](https://dkarkada.xyz/) came to me with a project idea: based

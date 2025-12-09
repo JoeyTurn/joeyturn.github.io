@@ -5,10 +5,10 @@ const posts = (await getCollection("blog")).filter(p => !p.data.draft);
 ---
 <BaseLayout title="Joey Turnbull - Personal">
   <h1>Personal</h1>
-  <ul>
+  <!-- <ul>
     {posts.map(({ slug, data }) => (
       <li><a href={`/personal/${slug}/`}>{data.title}</a></li>
     ))}
-  </ul>
+  </ul> -->
   <p>Come back later for more details!</p>
 </BaseLayout>

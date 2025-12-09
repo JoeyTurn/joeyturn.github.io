@@ -1,11 +1,11 @@
 ---
-title: All feature learning networks are/become balanced
+title: Feature learning networks are/become balanced
 pubDate: "2025-10-18"
 description: "Feature learning made simple"
 series: "Feature Learning"
 seriesOrder: 1
-draft: True
-onlylink: True
+draft: False
+onlylink: False
 ---
 
 I've been going through the literature on feature-learning linear networks, with the hope that it be useful to non-linear networks. Along the way, I came across "[From Lazy to Rich: Exact Learning Dynamics in Deep Linear Networks](https://arxiv.org/pdf/2409.14623)"\citep{dominé2025lazyrichexactlearning}, and while reading through, it seemed like they had identified a different type of feature learning than that of the maximum-update parameterization ($\mu$P) feature learning that I knew.
@@ -44,10 +44,12 @@ If that is true, then why does \citep{dominé2025lazyrichexactlearning} have a s
 
 $$
 \begin{equation}
-    \text{At init, } \frac{1}{\eta_a}\mathbf{a}^\top \mathbf{a} - \frac{1}{\eta_W} WW^\top = \lambda I_w.
+    \text{At init, } \frac{1}{\eta_a}\mathbf{a}^\top \mathbf{a} - \frac{1}{\eta_W} WW^\top = \lambda I_w,
 \end{equation}
 $$
 </div>
+
+with data being whitened: $$X^\top X = I_d$$.
 
 A proof for this quantity remaining invariant can be found in both \citep{kunin2024richquickexactsolutions} and [below](#conserved). With Gaussian initialization, this conserved equation is trivially achieved when the width w is large, making
 
@@ -172,7 +174,9 @@ $$
 
 with the implication being that there is a general balancedness between all layers that feature learning networks satisfy: the $i$-th singular values of all layers in a feature learning network are all roughly equivalent.
 
-## Takeaway
+## Takeaway & Future Efforts
+
+This blogpost was written as a dive into something I found that didn't make sense: how can balanced nets fit into the $$mu$$P picture. While discussing my thoughts with Dan Kunin (whose work is the core of this post), we noted how I'm using the known $$\mu$$P to get balacedness. Right now, I'm working on extending this in the opposite direction: can we get a different perspective on feature learning through balacedness <i>alone</i>, no $$\mu$$P involved? This is (part of) my current research, so if that sounds interesting, please feel free to reach out!
 
 ## Appendix
 
@@ -180,7 +184,7 @@ with the implication being that there is a general balancedness between all laye
 
 ### A1: Conserved balancedness throughout training 
 
-*To be written
+*To be written; check Dan Kunin's 
 
 </div>
 
@@ -189,4 +193,4 @@ with the implication being that there is a general balancedness between all laye
 
 [^bsz]: It should be mentioned that in my experiments, I use a batch size instead of population gradient descent, although I suspect this minimally changes results.
 
-[^balancednessreqs]: The paper itself details two other requirements: white data, and non-bottleneckedness/non-overparameterized. While the first condition can be trivially dropped for our discussion, we always assume $w$ > $\max(d, d_{out})$; from what I can tell, the non-overfitting condition can be dropped for our discussion.
+[^balancednessreqs]: The paper itself details one other requirements: non-bottleneckedness/non-overparameterized. While the first condition can be trivially dropped for our discussion, we always assume $w$ > $\max(d, d_{out})$; from what I can tell, the non-overfitting condition can be dropped for our discussion.
