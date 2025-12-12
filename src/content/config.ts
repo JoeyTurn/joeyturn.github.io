@@ -4,12 +4,16 @@ const blog = defineCollection({
     type: "content",
     schema: z.object({
         title: z.string(),
-        pubDate: z.coerce.date().optional(),
+        pubDate: z.coerce.date().optional(),  
         onlylink: z.boolean().optional(),
         draft: z.boolean().optional(),
         series: z.string().optional(),            // e.g., "Diffusion 101"
         seriesOrder: z.number().optional(),
         description: z.string().optional(),
+        links: z.array(z.object({
+            label: z.string(),                // e.g., "arXiv", "GitHub", "Site"
+            url: z.string(),                  // we’ll normalize to https:// if needed
+        })).optional(),
   }),
 });
 
