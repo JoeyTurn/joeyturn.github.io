@@ -91,22 +91,10 @@ Load in the data here! Hopefully, I don't need to explain this...
 
 ## Batch function selection
 
-A large portion of *MLPscape* is based off of batch functions, specifically ones that are defined within `MLPscape/data/batch_functions.py`. I'm working on a change to make this specific file not absolutely needed, but for the time being, this is what needs to be done:
-
-1. Within your file, have a bfn_config:
+A large portion of *MLPscape* is based off of batch functions. The batch functions should be set up in a particular way, like
 
 ```python
-bfn_config = dict(X_total = X_full, y_total = y_full, bfn_name="general_batch_fn")
-```
-
-Pretty much anything goes here, just make sure bfn_name is defined and your static variables are in place. Then, we'll need to set up the batch function itself.
-
-2. Within `MLPscape/data/batch_functions.py`, define your batch function.
-
-Try to set up the structure like how I've done below, and make sure `bsz` is defined. Also make sure to include your batch function within the `BATCH_FNS` dict! 
-
-```python
-def general_batch_fn(X_total, y_total, X=None, y=None, bsz=128,
+def your_bfn(X_total, y_total, X=None, y=None, bsz=128,
                      gen=None, **kwargs):
     def batch_fn(step: int, X=X, y=y):
         if (X is not None) and (y is not None):
@@ -120,13 +108,14 @@ def general_batch_fn(X_total, y_total, X=None, y=None, bsz=128,
             y_batch = ensure_torch(y_total.to(gen.device)[indices])
             return X_batch, y_batch
     return batch_fn
-
-BATCH_FNS = {
-    "general_batch_fn": general_batch_fn,
-}
 ```
 
-after this is setup, we won't need to touch anything specific to MLPscape again. (hence why I'm working on figuring out a workaround to this problem)
+which should be placed outside any "if __name__ == "__main()__:" statements so it can be found by _MLPscape_. Make sure kwargs is defined! Once this is set up, make sure bfn_config is set up to have
+
+```python
+other_args = dict(X_total = X_full, y_total = y_full) #one example
+bfn_config = dict(base_bfn=your_bfn, *other_args)
+```
 
 ## Other pretraining setup
 
@@ -151,17 +140,23 @@ global_config.update({"otherreturns": grabs})
 Quick note:
 
 ```python
-grabs = build_other_grabs(args.other_model_grabs, default_source=args.W_source, concat_outside=args.concat_outside,
-       per_alias_gram=args.other_model_gram, per_alias_kwargs=args.other_model_kwargs,)
+grabs = build_other_grabs(args.other_model_grabs, per_alias_kwargs=args.other_model_kwargs,)
 ```
-is often included in my examples, but is not strictly necessary. This is mostly a reminant of a past version.
+is often included in my examples, but is not strictly necessary; only include if grabs aren't defined within your file.
 
 ## Trainloop execution
 
-Finally, we can run everything! 
+Finally, we can run everything! If using multiprocessing, call
 
 ```python
-mp.set_start_method("spawn", force=True)    
+mp.set_start_method("spawn", force=True)
+```
+
+**Note**: If using a python notebook, the multiprocessing step doesn't play nice with an in-notebook batch function. Please either place the function in a .py file, or don't use multiprocessing.
+
+Then, we call
+
+```python    
 result = run_job_iterator(iterators, iterator_names, global_config, bfn_config=bfn_config)
 torch.cuda.empty_cache()
 ```
@@ -181,5 +176,4 @@ Short to say, after the push to meet the ICLR deadline, I began gradually making
 ## Future Plans
 
 + Surprisingly, there aren't *too* many actual direct ties to MLPs. A lot of the work here was model-agnostic, so I don't imagine it will be too dificult to make this into a more general **modelscape** repo.
-+ The reliance on `MLPscape/data/batch_functions.py` annoys me, and I want to work around it.
 + If there are other specific things that you feel should be added, feel free to send a message! I'll try to see if it has a place within *MLPscape* and if my CS skills are up to par with including it!
