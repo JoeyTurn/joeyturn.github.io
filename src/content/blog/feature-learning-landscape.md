@@ -184,8 +184,32 @@ This blogpost was written as a dive into something I found that didn't make sens
 
 ### A1: Conserved balancedness throughout training 
 
-*To be written; check Dan Kunin's 
+Take $y=aWx$. Let $\delta W = -\eta_W\frac{\partial L}{\partial W}$ and $\delta a = -\eta_a\frac{\partial L}{\partial a}$. For a MSE loss,
+$$
+\begin{equation*}
+    L = (y-aWx)^2
+\end{equation*}
+$$
+we have
+$$
+\begin{align*}
+    \frac{\partial L}{\partial W_{ij}} &= 2(y-aWx)(a_i \delta_{ij} x_j)\\
+    \frac{\partial L}{\partial a_i} &= 2(y-aWx)(W_{ij} x_j)
+\end{align*}
+$$
+taking these, we can see that $\frac{W \delta W}{\eta_W} \sim \frac{a \delta a}{\eta_a}$; if we take the gradient flow limit and remembering the chain rule, we have:
 
+$$
+\begin{equation*}
+    \frac{\partial(W^2/\eta_W-a^2/\eta_a)}{\partial t} = 0
+\end{equation*}
+$$
+meaning (if we ignore my very loose definitions of $W^2$ and $a^2$ for a matrix and scalar),
+$$
+\begin{equation*}
+    W^2/\eta_W-a^2/\eta_a = \text{const}.
+\end{equation*}
+$$
 </div>
 
 ## References
