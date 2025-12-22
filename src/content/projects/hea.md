@@ -83,7 +83,7 @@ To give a hint as to how to do this, we can write out the eigensystem equation a
 
 $$
 \begin{equation}
-    \int_{x'\sim\mu} \text{d}x' K(x, x') \phi(x') = \int_{-\infty}^\infty \text{d}x' p(x') K(x, x') \phi(x') = \lambda \phi(x)
+    \int_{\vec{x}'\sim\mu} \text{d}x' K(\vec{x}, \vec{x}') \phi(x') = \int_{-\infty}^\infty \text{d}\vec{x}' p(x') K(\vec{x}, \vec{x}') \phi(\vec{x}') = \lambda \phi(\vec{x})
 \end{equation}
 $$
 
@@ -95,21 +95,75 @@ where $\mu$ is the data distribution I mentioned earlier, and $p$ is it's probab
 
 There's a neat question one can ask about anisotropic Gaussian data on kernels: for a general kernel, what should we expect the eigenfunctions to look like? How much do we even need to worry about the specifics of any kernel? The answer is, surprisingly, not much... let's go through it. You can broadly say, "well, the kernel should be able to represent any polynomial of the data," so we can separate out the features into different levels representing the orders of the polynomials. I'll give the first one as a freebe as I didn't motivate it all that much:
 
-- Const mode: $\lambda$ = 1, $\phi(x)$ = 1
+- Const mode: $\lambda$ = 1, $\phi(\vec{x})$ = 1
 
 from there on, we can guess that the data $x_i \sim \mathcal{N}(0, \gamma_i)$ itself (ie a linear function of the data) will be a feature[^gammacon]:
 
 
-- Linear modes: $\lambda$ = $\gamma_i$, $\phi(x)$ = $x_i$.
+- Linear modes: $\lambda$ = $\gamma_i$, $\phi(\vec{x})$ = $x_i$.
 
 From here on, I hope the pattern has become more obvious, with the next level being...
 
-- Quadratic modes: $\lambda$ = $\gamma_i\gamma_j$, $\phi(x)$ = $x_ix_j$
-- Cubic modes: $\lambda$ = $\gamma_i\gamma_j\gamma_k$, $\phi(x)$ = $x_ix_jx_k$
+- Quadratic modes: $\lambda$ = $\gamma_i\gamma_j$, $\phi(\vec{x})$ = $x_ix_j$
+- Cubic modes: $\lambda$ = $\gamma_i\gamma_j\gamma_k$, $\phi(\vec{x})$ = $x_ix_jx_k$
 
 ## Kernel eigensystem
 
 The above picture obviously misses some things, namely *the kernel itself*. However, our guess is **surprisingly** close to the real kernel eigensystem!
+
+### Eigenvalue fix
+
+To incorporate the kernel, write out the kernel function as a Taylor series expansion:
+
+$$
+\begin{equation}
+    K(\vec{x}, \vec{x}') = \sum_\ell^\infty c_\ell (\vec{x}^\top \vec{x}')^\ell,
+\end{equation}
+$$
+
+with this epansion working so long as the points $\vec{x}$ and $\vec{x}'$ have roughly the same magnitude, $|\vec{x}| \approx |\vec{x}'| \equiv r_0$. This statement is equivalent to having datapoints $\vec{x}$ lie along a hyperellipsoid that "looks spherical enough:" we don't need the data to *exactly* lie on the sphere, but if one direction (ie $x_0$) holds much more weight than the others, then the data lies more along a line than a sphere, and the expansion breaks. We can start to see where the eigenvalue fix kicks in: let's take a linear mode $x_i$ to be our eigenfunction we want the eigenvalue of. In the expansion, this will (at least shortly if you're familiar enough with Guassian distributions) select out only the $x_i^\top x_i'$ part of the $(\vec{x}^\top \vec{x}')^\ell$ equation:
+
+$$
+\begin{equation*}
+    K(\vec{x}, \vec{x}')x_i = c_1 (x_i^\top x_i') x_i \rightarrow c_1 \gamma_i x_i = \lambda_{x_i} x_i,
+\end{equation*}
+$$
+
+where we can see the only fix we need to make to the eigenvalues are to add on an additional factor of $c_\ell$ to the eigenvalues at level $\ell$.
+
+In a future update, I will give a small preview of how to obtain these "level coefficients" $c_\ell$.
+
+One of the amazing things here is that this is *direction-independent* so all eigenvalues within a level are affected by the same factor[^rotinvcond], and to give a bit of a spoiler, this is the *only* place the kernel appears! The eigenfunctions need to be fixed in a very simple way:
+
+### Eigenfunction fix
+
+The functions $\phi(\vec{x})$ = $\prod_\alpha x_\alpha$ for some general index-selecting object $\alpha$ need to be changed so that they're actually eigenfunctions: they must be an orthonormal basis.
+
+To start, $x_\alpha^2$ will be on average $\gamma_\alpha$, not $1$, so the first thing to do is to have $\phi(\vec{x})$ = $\prod_\alpha x_\alpha/\gamma_\alpha$.
+
+The second thing to do is to verify these are actually orthogonal to each other: $\int_{\vec{x}\sim\mu} \text{d}\vec{x} \phi_i(\vec{x})^\top\phi_j(\vec{x}) = \delta_{ij}$. This will **not** be true when there are repeated indices, $\x_i^2$ isn't orthogonal to $1$, at least when the data is Gaussian-distributed! To get around this, we can simply subtract off whatever the overlapping component is, so $\phi(\vec{x}) = x_i^2/\gamma_i \rightarrow (x_i^2-1)/\gamma_i$. If we continue this pattern (the linear and cubic modes overlap, quadratic and quartic, etc.) then we get the [Hermite polynomials](https://en.wikipedia.org/wiki/Hermite_polynomials).
+
+# The Hermite Eigenstructure Ansatz
+
+We can now state the main takeaway of our paper:
+
+Take any rotation-invariant kernel with high-dimensional Gaussian data. The eigensystem of this kernel will be approximately the same as if the eigenvalues and eigenfunctions were given by,
+- $\lambda_i = c_\ell \prod_i \gamma_i^{\alpha_i}$
+- $\phi_i(\vec{x}) = \prod_i$ $h_{\alpha_i}(x_i/\gamma_i)$
+
+where $\alpha \in \mathbb{N}^d$, $\sum_i \alpha_i = \ell$, and $h$ are the (probabilist's) Hermite polynomials. We call this the **Hermite Eigenstructure Ansatz** (HEA).
+
+Checking this numerically, we see a **fantastic** overlap between the HEA and a real kernel eigensystem:
+
+<p style="text-align:center">
+  <img src="/hea/HEAcheck.png" alt="HEA predicts kernel eigensystems" width="900" loading="lazy" decoding="async" />
+</p>
+
+This works among numerous kernels and on **real** datasets: CIFAR10, SVHN, and ImageNet! In the images, we see how well the $i$-th eigenvalues are approximated by the HEA (top), and the similarity between the HEA-predicted and real eigenvectors (bottom), where we have binned eigenvectors into an "eigenspace" for visual clarity.
+
+## The HEA is a guess
+
+Shortly, I'll update this page to go over when the HEA works, when it doesn't, and how we use the HEA moving forward.
 
 ## References
 
@@ -118,4 +172,4 @@ The above picture obviously misses some things, namely *the kernel itself*. Howe
 
 [^gammacon]: We usually like to have $\gamma_i \text{ < } 1$ such that the constant mode comes first, but nothing really breaks if this is not true.
 
-<!-- [^gammacondition]  -->
+[^rotinvcond]: This is in most part due to the kernel being rotation-invariant. For kernels that are not rotation-invariant, we'd start to see direction-dependent $c_\ell$s. 
