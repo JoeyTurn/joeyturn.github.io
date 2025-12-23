@@ -1,6 +1,6 @@
 ---
 title: Rundown of "Predicting Kernel Regression Learning Curves from only Raw Data Statistics" - the HEA
-pubDate: "2025-12-24"
+pubDate: "2025-12-23"
 description: "On real data, we know exactly how kernel regression performs."
 links:
   - { label: "arXiv",  url: "http://arxiv.org/abs/2510.14878" }
