@@ -1,6 +1,6 @@
 ---
 title: Rundown of "Predicting Kernel Regression Learning Curves from only Raw Data Statistics" - the HEA
-pubDate: "2025-10-11"
+pubDate: "2025-12-24"
 description: "On real data, we know exactly how kernel regression performs."
 links:
   - { label: "arXiv",  url: "http://arxiv.org/abs/2510.14878" }
@@ -16,10 +16,12 @@ katexMacros:
   "\\valpha": "{\\bm{\\alpha}}"
 ---
 
-As a small preview, we can predict *exactly* what the final test error will be if you train a kernel machine on image datasets:
+As a small preview for what we've accomplished in this paper, we can predict *exactly* what the final test error will be if you train a kernel machine on image datasets:
 
 <p style="text-align:center">
-  <img src="/hea/learning_curves.png" alt="Kernel curves" width="900" loading="lazy" decoding="async" />
+  <img src="/hea/learning_curves.png" alt="Kernel curves"
+  style="width:100%; max-width:900px; height:auto; display:block; margin:0 auto;"
+  loading="lazy" decoding="async" />
 </p>
 
 ## Introduction and Motivation
@@ -40,7 +42,9 @@ where the main difference to highlight is going from just $\vec{x}$ to $K(\vec{x
 If you're not yet convinced kernels are the right objects to look at (ie what do these things have to do with practical networks?), you're right to be sceptical! One of the main drivers behind looking at this simple system and hoping our findings will be useful moving forward is any network's relation to the [Neural Tangent Kernel](https://en.wikipedia.org/wiki/Neural_tangent_kernel) (NTK), which are an equivalent description of any network if the width of it is taken to infinity, along with some other conditions on the network. While these NTKs can be arbitrarily complex (specifically, those of the transformer and CNNs), the MLP's neural tangent kernel is rotationally-invariant: in the feature space, distances are calculated solely based off of their difference in angle from the origin. For this reason, we decided to study what the features are of any general rotation-invariant kernel, with a sample scematic of our approach below:
 
 <p style="text-align:center">
-  <img src="/hea/data_to_estimator.png" alt="Data transforms to features giving an estimator" width="900" loading="lazy" decoding="async" />
+  <img src="/hea/data_to_estimator.png" alt="Data transforms to features giving an estimator"
+  style="width:100%; max-width:900px; height:auto; display:block; margin:0 auto;"
+  loading="lazy" decoding="async" />
 </p>
 <!-- ![data_to_estimator](/hea/data_to_estimator.png) -->
 
@@ -141,29 +145,105 @@ The functions $\phi(\vec{x})$ = $\prod_\alpha x_\alpha$ for some general index-s
 
 To start, $x_\alpha^2$ will be on average $\gamma_\alpha$, not $1$, so the first thing to do is to have $\phi(\vec{x})$ = $\prod_\alpha x_\alpha/\gamma_\alpha$.
 
-The second thing to do is to verify these are actually orthogonal to each other: $\int_{\vec{x}\sim\mu} \text{d}\vec{x} \phi_i(\vec{x})^\top\phi_j(\vec{x}) = \delta_{ij}$. This will **not** be true when there are repeated indices, $\x_i^2$ isn't orthogonal to $1$, at least when the data is Gaussian-distributed! To get around this, we can simply subtract off whatever the overlapping component is, so $\phi(\vec{x}) = x_i^2/\gamma_i \rightarrow (x_i^2-1)/\gamma_i$. If we continue this pattern (the linear and cubic modes overlap, quadratic and quartic, etc.) then we get the [Hermite polynomials](https://en.wikipedia.org/wiki/Hermite_polynomials).
+The second thing to do is to verify these are actually orthogonal to each other: $\int_{\vec{x}\sim\mu} \text{d}\vec{x} \phi_i(\vec{x})^\top\phi_j(\vec{x}) = \delta_{ij}$. This will **not** be true when there are repeated indices, $\vec{x}_i^2$ isn't orthogonal to $1$, at least when the data is Gaussian-distributed! To get around this, we can simply subtract off whatever the overlapping component is, so $\phi(\vec{x}) = x_i^2/\gamma_i \rightarrow (x_i^2-1)/\gamma_i$. If we continue this pattern (the linear and cubic modes overlap, quadratic and quartic, etc.) then we get the [Hermite polynomials](https://en.wikipedia.org/wiki/Hermite_polynomials).
 
 # The Hermite Eigenstructure Ansatz
 
 We can now state the main takeaway of our paper:
 
-Take any rotation-invariant kernel with high-dimensional Gaussian data. The eigensystem of this kernel will be approximately the same as if the eigenvalues and eigenfunctions were given by,
+Take any rotation-invariant kernel with high-dimensional Gaussian data. The eigensystem of this kernel will be **approximately** the same as if the eigenvalues and eigenfunctions were given by,
 - $\lambda_i = c_\ell \prod_i \gamma_i^{\alpha_i}$
 - $\phi_i(\vec{x}) = \prod_i$ $h_{\alpha_i}(x_i/\gamma_i)$
 
-where $\alpha \in \mathbb{N}^d$, $\sum_i \alpha_i = \ell$, and $h$ are the (probabilist's) Hermite polynomials. We call this the **Hermite Eigenstructure Ansatz** (HEA).
+where $\alpha \in \mathbb{N}^d$, $\sum_i \alpha_i = \ell$, and $h$ are the (probabilist's) Hermite polynomials. We call this the **Hermite Eigenstructure Ansatz** (HEA), "ansatz" here roughly translated to "approximation" or "guess".
 
 Checking this numerically, we see a **fantastic** overlap between the HEA and a real kernel eigensystem:
 
 <p style="text-align:center">
-  <img src="/hea/HEAcheck.png" alt="HEA predicts kernel eigensystems" width="900" loading="lazy" decoding="async" />
+  <img src="/hea/HEAcheck.png" alt="HEA predicts kernel eigensystems"
+  style="width:100%; max-width:900px; height:auto; display:block; margin:0 auto;" 
+  loading="lazy" decoding="async" />
 </p>
 
 This works among numerous kernels and on **real** datasets: CIFAR10, SVHN, and ImageNet! In the images, we see how well the $i$-th eigenvalues are approximated by the HEA (top), and the similarity between the HEA-predicted and real eigenvectors (bottom), where we have binned eigenvectors into an "eigenspace" for visual clarity.
 
 ## The HEA is a guess
 
-Shortly, I'll update this page to go over when the HEA works, when it doesn't, and how we use the HEA moving forward.
+Of course, we can't prove exactly how anything (other than maybe linear regression) performs on real data--there's a reason we call this the Hermite Eigenstructure *Ansatz* and not the Hermite Eigenstructure *Equivalence*. The HEA starts to break down once we get further from the nice land of theory, with 3 key points being required on the data and the kernels: the data lies on something like a hypersphere, the level coefficients $c_\ell$ decay quickly enough, and the data is  We can exactly prove that this Hermite eigensystem is the true eigensystem if we "inverse" these conditions. In slightly more detail,
+
+1. (High data dimension) If the data is inherently low dimensional, or if a few directions contribute the most to the data's variance, then the HEA starts breaking down. If there are preferred directions, then the prefactors $c_\ell$ wouldn't just depend on the level, and there's no guarantees the eigenfunctions will be our simple hermites. Certain datasets (namely categorical, see "Mushrooms") have a few preferred directions, with the exact eigenstructure differences shown below.
+
+<p style="text-align:center">
+  <img src="/hea/mushrooms.png" alt="HEA breaks with low data"
+  style="width:100%; max-width:900px; height:auto; display:block; margin:0 auto;" 
+  loading="lazy" decoding="async" />
+</p>
+
+2. (Fast level coefficient decay) If the level coefficients are "close" to each other, then we get a strange effect: to recover our eigenfunctions as Hermites, we made $\phi(x_i^d)$ orthogonal to $\phi(x_i^{d+2})$. That, however, was under the assumption that the eigenvalue corresponding with the degree $d$ polynomial was much larger than the $d+2$ polynomial; when this breaks, we end up with a bit of "mutual-orthonormalization" where both the degree $d$ and $d+2$ terms interact and try to orthonormalize against the other. In practice, we can sometimes fix this problem by just making the kernel wider; otherwise, the dataset is simply not good for our kernel and HEA.
+
+<p style="text-align:center">
+  <img src="/hea/largegaussian.png" alt="HEA breaks if the Kernel is too narrow"
+  style="width:100%; max-width:900px; height:auto; display:block; margin:0 auto;" 
+  loading="lazy" decoding="async" />
+</p>
+
+Above, we see that changing the Gaussian kernel's width $\sigma$ can drastically affect how well the HEA works.
+
+<p style="text-align:center">
+  <img src="/hea/smallgaussian.png" alt="HEA doesn't change with respect to the data, if the kernel is Gaussian"
+  style="width:100%; max-width:900px; height:auto; display:block; margin:0 auto;" 
+  loading="lazy" decoding="async" />
+</p>
+
+Whereas changing the dataset size itself barely changes anything!
+
+<p style="text-align:center">
+  <img src="/hea/smalllaplace.png" alt="HEA breaks with respect to the data, if the kernel is Laplacian"
+  style="width:100%; max-width:900px; height:auto; display:block; margin:0 auto;" 
+  loading="lazy" decoding="async" />
+</p>
+
+Although this is not true for all kernels! If we take the Gaussian (or ReLU NTK), then the *data* is far more important!
+
+3. (Gaussian data) As stated earlier, we need Gaussian data with known covariances--this clearly isn't true in real settings, so how far does it go if the data isn't Gaussian? The HEA actually works quite well, unless the PCA components are heavily dependent[^dependency] or the marginals are far from being approximated by Gaussian. Independence is hard to visualize, but below I've given examples of data that's far from Gaussian.
+
+<p style="text-align:center">
+  <img src="/hea/pcagaussian.png" alt="Gaussianity of different real datasets"
+  style="width:100%; max-width:900px; height:auto; display:block; margin:0 auto;" 
+  loading="lazy" decoding="async" />
+</p>
+
+# HEA to predict learning curves
+
+Now we can get to the real takeaway: as we can predict the eigenstructure of the data, we can take our favorite kernel learning curve theory paper (ie \citep{simon:2021-eigenlearning}), and directly predict what the test error, train error, error of specific components, etc. is, or how many samples we need to get below a certain error!
+
+<p style="text-align:center">
+  <img src="/hea/learning_curves.png" alt="Kernel curves"
+  style="width:100%; max-width:900px; height:auto; display:block; margin:0 auto;"
+  loading="lazy" decoding="async" />
+</p>
+
+While I'd recommend reading any one of the kernel learning curve theory papers to get a better idea of what's going on under the hood, I'll highlight one thing here: the kernel learns the top $n$ eigenfunctions when presented with $n$ samples. Combined with the HEA, we can get a striking observation, if $c_6 \gamma_i^6$ > $c_1 \gamma_j$, then the sixth-order function corresponding with $x_i^6$ will be learned before the linear function $x_j$! 
+
+# The HEA moving forward
+
+Let's step back for a little bit. Why should the HEA be at all useful moving forward?
+
+My response: I've checked how fast *feature-learning* networks learn each term in the polynomial expansion of data, and found that the HEA eigenvalues are **incredibly** predictive of how long it takes a network to learn its corresponding term:
+
+<p style="text-align:center">
+  <img src="/hea/heamlp.png" alt="MLPs learn in the order predicted by the HEA"
+  style="width:100%; max-width:900px; height:auto; display:block; margin:0 auto;"
+  loading="lazy" decoding="async" />
+</p>
+
+where we're currently working on understanding where the $1/2$ factor comes from.
+
+## Afterword
+
+From here, we're taking a detour away from kernels and putting a much heavier focus on feature-learning MLPs. If you have questions or comments about any of the content on this page, please feel free to reach out to me! Thanks for reading!
+
+<!-- Shortly, I'll update this page to go over when the HEA works, when it doesn't, and how we use the HEA moving forward. -->
 
 ## References
 
@@ -173,3 +253,5 @@ Shortly, I'll update this page to go over when the HEA works, when it doesn't, a
 [^gammacon]: We usually like to have $\gamma_i \text{ < } 1$ such that the constant mode comes first, but nothing really breaks if this is not true.
 
 [^rotinvcond]: This is in most part due to the kernel being rotation-invariant. For kernels that are not rotation-invariant, we'd start to see direction-dependent $c_\ell$s. 
+
+[^dependency]: PCA is inherently an algorithm that creates dependent components, although some datasets have components that are much more dependent than others. As an example, independent-coordinate isotropic data will be highly dependent under PCA, whereas independent-coordinate highly anisotropic data will have PCA extract the highest anisotropy directions in a much more coordinate-independent manner.
