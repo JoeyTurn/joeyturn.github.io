@@ -57,7 +57,7 @@ Rotation invariant kernels can be written mathematically as
 
 $$
 \begin{equation*}
-    K(\vec{x}, \vec{x}') = K(\vec{x}^\top \vec{x}')
+    K(\vec{x}, \vec{x}') = K(|\vec{x}, \vec{x}', \vec{x}^\top \vec{x}')
 \end{equation*}
 $$
 
@@ -125,7 +125,7 @@ $$
 \end{equation}
 $$
 
-with this epansion working so long as the points $\vec{x}$ and $\vec{x}'$ have roughly the same magnitude, $|\vec{x}| \approx |\vec{x}'| \equiv r_0$. This statement is equivalent to having datapoints $\vec{x}$ lie along a hyperellipsoid that "looks spherical enough:" we don't need the data to *exactly* lie on the sphere, but if one direction (ie $x_0$) holds much more weight than the others, then the data lies more along a line than a sphere, and the expansion breaks. We can start to see where the eigenvalue fix kicks in: let's take a linear mode $x_i$ to be our eigenfunction we want the eigenvalue of. In the expansion, this will (at least shortly if you're familiar enough with Guassian distributions) select out only the $x_i^\top x_i'$ part of the $(\vec{x}^\top \vec{x}')^\ell$ equation:
+with this epansion working so long as the points $\vec{x}$ and $\vec{x}'$ have roughly the same magnitude, $|\vec{x}| \approx |\vec{x}'| \equiv r_0$. This turns our rotation-invariant kernel into a dot-product kernel! Being able to express a rotation-invariant kernel as a dot product one is equivalent to having datapoints $\vec{x}$ lie along a hyperellipsoid that "looks spherical enough:" we don't need the data to *exactly* lie on the sphere, but if one direction (ie $x_0$) holds much more weight than the others, then the data lies more along a line than a sphere, and the expansion breaks. We can start to see where the eigenvalue fix kicks in: let's take a linear mode $x_i$ to be our eigenfunction we want the eigenvalue of. In the expansion, this will (at least shortly if you're familiar enough with Guassian distributions) select out only the $x_i^\top x_i'$ part of the $(\vec{x}^\top \vec{x}')^\ell$ equation:
 
 $$
 \begin{equation*}
