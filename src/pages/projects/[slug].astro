@@ -99,7 +99,7 @@ const { Content } = await entry.render();
   )}
 
   {entry.data.authors?.some(a => a.name.includes("*")) && (
-    <p class="author-note"><span aria-hidden="true">*</span> Joint authorship.</p>
+    <p class="author-note"><span aria-hidden="true">*</span> Joint primary authorship.</p>
   )}
 
   {entry.data.description && <p class="subtitle">{entry.data.description}</p>}

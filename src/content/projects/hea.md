@@ -1,7 +1,7 @@
 ---
 title: Rundown of "Predicting Kernel Regression Learning Curves from only Raw Data Statistics" - the HEA
 pubDate: "2025-12-23"
-description: "On real data, we know exactly how kernel regression performs."
+description: "On real data, we know how kernel regression performs."
 links:
   - { label: "arXiv",  url: "http://arxiv.org/abs/2510.14878" }
   - { label: "GitHub", url: "https://github.com/JoeyTurn/hermite-eigenstructure-ansatz" }
@@ -16,7 +16,7 @@ katexMacros:
   "\\valpha": "{\\bm{\\alpha}}"
 ---
 
-As a small preview for what we've accomplished in this paper, we can predict *exactly* what the final test error will be if you train a kernel machine on image datasets:
+As a small preview for what we've accomplished in this paper, we can predict with *very* high fidelity what the final test error will be if you train a kernel machine on image datasets:
 
 <p style="text-align:center">
   <img src="/hea/learning_curves.png" alt="Kernel curves"
@@ -26,7 +26,7 @@ As a small preview for what we've accomplished in this paper, we can predict *ex
 
 ## Introduction and Motivation
 
-One of the biggest goals of deep learning theory is to explain the underlying black-box machine learning system. One notable observation is that we want to describe how the models react to certain data being presented: we want to be able to understand that a machine sees a cat by the shape of its ears or the color of its fur rather than sporatic correlations between the cat images we gave it during training; we hope that large language models can be understood by presenting it certain sentences to see which parts of the network are activated; we imagine the attention mechanism is putting together an understandable relation between the words we give it; and many, many more examples. In the simplest machine learning system, we've actually already done this: linear regression can be viewed as tending to "learn" (fit the slope to) the parts of the data that have the highest covariance first before fitting those with lower covariance later. While there are many trying to perform a similar in spirit *data-dependent* analysis of large language models, these systems are overwhelmingly complex, enough so to where it isn't clear that tackling the hardest-case, most cutting-edge system is actually the correct way forward. Instead, it is my belief (and once those of the [phage group](https://en.wikipedia.org/wiki/Phage_group) in biology) that we should go to an Occum's razor of models: one that is simple enough to capture key phenomena, and no more complex. 
+One of the biggest goals of deep learning theory is to explain the underlying black-box machine learning system. One notable observation is that we want to describe how the models react to certain data being presented: we want to be able to understand that a machine sees a cat by the shape of its ears or the color of its fur rather than sporadic correlations between the cat images we gave it during training; we hope that large language models can be understood by presenting them with certain sentences to see which parts of the network are activated; we imagine the attention mechanism is putting together an understandable relation between the words we give it; and many, many more examples. In the simplest machine learning system, we've actually already done this: linear regression can be viewed as tending to "learn" (fit the slope to) the parts of the data that have the highest covariance first before fitting those with lower covariance later. While there are many trying to perform a similar in spirit *data-dependent* analysis of large language models, these systems are overwhelmingly complex, enough so to where it isn't clear that tackling the hardest-case, most cutting-edge system is actually the correct way forward. Instead, it is my belief (and once those of the [phage group](https://en.wikipedia.org/wiki/Phage_group) in biology) that we should go to an Occam's razor of models: one that is simple enough to capture key phenomena, and no more complex. 
 
 [Kernel Ridge Regression](https://en.wikipedia.org/wiki/Kernel_method) (KRR) seemed to be a promising avenue--it's a machine learning method that amounts to doing linear regression on the data... just after it's been processed. If you're familiar with kernel regression in detail, feel free to skip to [here](#skipoverview). In math, we can directly compare linear and kernel regression:
 
@@ -39,7 +39,7 @@ $$
 
 where the main difference to highlight is going from just $\vec{x}$ to $K(\vec{x}, \vec{x}_i)$, the kernel function. Our precursory understanding of KRR comes from applying linear regression on top of the kernel, which relates how similar any two points are $\vec{x}$ and $\vec{x}_i$. Said another way, the kernel is just extracting the distance between any two points, with this distance being in some high-dimensional, nonlinear space, referred to as the 'feature space'.
 
-If you're not yet convinced kernels are the right objects to look at (ie what do these things have to do with practical networks?), you're right to be sceptical! One of the main drivers behind looking at this simple system and hoping our findings will be useful moving forward is any network's relation to the [Neural Tangent Kernel](https://en.wikipedia.org/wiki/Neural_tangent_kernel) (NTK), which are an equivalent description of any network if the width of it is taken to infinity, along with some other conditions on the network. While these NTKs can be arbitrarily complex (specifically, those of the transformer and CNNs), the MLP's neural tangent kernel is rotationally-invariant: in the feature space, distances are calculated solely based off of their difference in angle from the origin. For this reason, we decided to study what the features are of any general rotation-invariant kernel, with a sample scematic of our approach below:
+If you're not yet convinced kernels are the right objects to look at (ie what do these things have to do with practical networks?), you're right to be sceptical! One of the main drivers behind looking at this simple system and hoping our findings will be useful moving forward is any network's relation to the [Neural Tangent Kernel](https://en.wikipedia.org/wiki/Neural_tangent_kernel) (NTK), which are an equivalent description of any network if the width of it is taken to infinity, along with some other conditions on the network. While these NTKs can be arbitrarily complex (specifically, those of the transformer and CNNs), the MLP's neural tangent kernel is rotationally-invariant: in the feature space, distances are calculated solely based off of their difference in angle from the origin. For this reason, we decided to study what the features are of any general rotation-invariant kernel, with a sample schematic of our approach below:
 
 <p style="text-align:center">
   <img src="/hea/data_to_estimator.png" alt="Data transforms to features giving an estimator"
