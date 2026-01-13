@@ -2,6 +2,7 @@
 title: MLP experiment repo released!
 pubDate: "2025-12-12"
 description: "Training MLPs can be simple... up until you want to look at things other than the loss and your code gets bloated. But no more!"
+frontpagedescription: I made a repo that makes training MLPs quite simple!
 series: "Repo Release"
 seriesOrder: 1
 draft: False

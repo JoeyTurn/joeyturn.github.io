@@ -7,12 +7,13 @@ const blog = defineCollection({
         pubDate: z.coerce.date().optional(),  
         onlylink: z.boolean().optional(),
         draft: z.boolean().optional(),
-        series: z.string().optional(),            // e.g., "Diffusion 101"
+        series: z.string().optional(),
         seriesOrder: z.number().optional(),
         description: z.string().optional(),
+        frontpagedescription: z.string().optional(),
         links: z.array(z.object({
-            label: z.string(),                // e.g., "arXiv", "GitHub", "Site"
-            url: z.string(),                  // we’ll normalize to https:// if needed
+            label: z.string(),
+            url: z.string(),
         })).optional(),
         tagline: z.enum(["research", "notes"]).default("research"),
   }),
@@ -25,16 +26,17 @@ const projects = defineCollection({
         pubDate: z.coerce.date().optional(),
         onlylink: z.boolean().optional(),
         draft: z.boolean().optional(),
-        series: z.string().optional(),            // e.g., "Diffusion 101"
+        series: z.string().optional(),
         seriesOrder: z.number().optional(),
         description: z.string().optional(),
+        frontpagedescription: z.string().optional(),
         links: z.array(z.object({
-            label: z.string(),                // e.g., "arXiv", "GitHub", "Site"
-            url: z.string(),                  // we’ll normalize to https:// if needed
+            label: z.string(),
+            url: z.string(),
         })).optional(),
         authors: z.array(z.object({
             name: z.string(),
-            url: z.string().optional(),  // allow missing urls too
+            url: z.string().optional(),
         })).optional(),
   }),
 });
@@ -46,8 +48,9 @@ const personal = defineCollection({
         pubDate: z.coerce.date().optional(),
         onlylink: z.boolean().optional(),
         draft: z.boolean().optional(),
-        series: z.string().optional(),            // e.g., "Diffusion 101"
+        series: z.string().optional(),
         seriesOrder: z.number().optional(),
+        frontpagedescription: z.string().optional(),
         description: z.string().optional(),
   }),
 });

@@ -1,7 +1,8 @@
 ---
 title: Feature learning networks are/become balanced
 pubDate: "2025-10-18"
-description: "Feature learning made simple"
+description: "Feature learning made simple!"
+frontpagedescription: "Balancedness might be a way to unify all feature learning networks!"
 series: "Feature Learning"
 seriesOrder: 1
 draft: False

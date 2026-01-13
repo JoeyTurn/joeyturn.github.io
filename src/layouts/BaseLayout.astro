@@ -53,7 +53,6 @@ const isActive = (href: string): boolean => pathname === href || (href !== "/" &
         text-indent: -1.5rem;      /* pull number back out */
         }
         .references a { word-break: break-word; }
-
     </style>
     <link
       rel="stylesheet"
@@ -62,11 +61,11 @@ const isActive = (href: string): boolean => pathname === href || (href !== "/" &
     />
   </head>
   <body>
-    <header>
+    <header class="site-header">
       <a href="/">Joey Turnbull</a>
        <nav class="nav">
         <a class={`nav-btn ${isActive("/projects") ? "is-active" : ""}`} href="/projects">
-          <i class="fas fa-folder-open" aria-hidden="true"></i>
+          <i class="fas fa-atom" aria-hidden="true"></i>
           <span>Projects</span>
         </a>
 
@@ -76,11 +75,84 @@ const isActive = (href: string): boolean => pathname === href || (href !== "/" &
         </a>
 
         <a class={`nav-btn ${isActive("/personal") ? "is-active" : ""}`} href="/personal">
-          <i class="fas fa-user" aria-hidden="true"></i>
+          <i class="fas fa-frog" aria-hidden="true"></i>
           <span>Personal</span>
         </a>
       </nav>
     </header>
+    <style>
+      .site-header{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:1rem;
+      padding:0.75rem 1rem;
+      }
+
+      .nav{
+        display:flex;
+        align-items:center;
+        gap:0.75rem;
+      }
+
+      /* Invisible by default */
+      :global(.site-header .nav .nav-btn){
+        display:inline-flex;
+        align-items:center;
+        gap:0.55rem;
+
+        padding:0.55rem 0.85rem;
+        border-radius: 999px / 70%;
+        text-decoration:none;
+        color: inherit;
+
+        background: transparent;
+        border: 1px solid transparent;
+        box-shadow: none;
+
+        /* subtle “it’s clickable” cue without a box */
+        opacity: 0.92;
+
+        transition:
+          transform 120ms ease,
+          background 120ms ease,
+          box-shadow 120ms ease,
+          border-color 120ms ease,
+          opacity 120ms ease;
+      }
+
+      :global(.site-header .nav .nav-btn i){
+        font-size: 0.95em;
+        opacity: 0.9;
+      }
+
+      /* Appears on hover/focus */
+      :global(.site-header .nav .nav-btn:hover),
+      :global(.site-header .nav .nav-btn:focus-visible){
+        transform: translateY(-1px);
+        opacity: 1;
+
+        background: rgba(0,0,0,0.08);
+        border-color: rgba(0,0,0,0.14);
+        box-shadow: 0 6px 18px rgba(0,0,0,0.10);
+
+        outline: none;
+      }
+
+      :global(.site-header .nav .nav-btn:active){
+        transform: translateY(0px);
+        box-shadow: none;
+      }
+
+      /* Keep current page highlighted even when not hovered */
+      :global(.site-header .nav .nav-btn.is-active){
+        opacity: 1;
+        background: rgba(0,0,0,0.10);
+        border-color: rgba(0,0,0,0.18);
+        box-shadow: 0 0 0 2px rgba(0,0,0,0.10) inset;
+        font-weight: 600;
+      }
+    </style>
     <main>
       <slot />
     </main>

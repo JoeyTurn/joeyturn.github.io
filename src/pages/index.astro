@@ -44,8 +44,7 @@ const notePosts = blog
     {projects.map(({ slug, data }) => (
       <li>
         <a class="projtitle" href={`/projects/${slug}/`}>{data.title}</a>
-
-        {data.links && data.links.length > 0 && (
+		{data.links && data.links.length > 0 && (
           <div class="externals">
             {data.links.map((L, i) => (
               <>
@@ -53,8 +52,10 @@ const notePosts = blog
                 {i < data.links!.length - 1 && <span class="dot">·</span>}
               </>
             ))}
+			<p class="projdesc">{data.frontpagedescription}</p>
           </div>
         )}
+		
       </li>
     ))}
   	</ul>
@@ -64,9 +65,10 @@ const notePosts = blog
 	<h2><a href="/blog">Blog</a></h2>
 	<!-- <p>(Currently being worked on, please check back later.)</p> -->
 	<!-- <hr class="section-hr" /> -->
+	<h4>Blog - Research</h4>
 	<ul>
 		{researchPosts.map(({ slug, data }) => (
-		<li><a href={`/blog/${slug}/`}>{data.title}</a></li>
+		<li><a href={`/blog/${slug}/`}>{data.title}</a><p class="projdesc">{data.frontpagedescription}</p></li>
 		))}
 	</ul>
 	<h4>Blog - Notes</h4>
