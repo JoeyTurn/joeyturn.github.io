@@ -87,6 +87,93 @@ const isActive = (href: string): boolean => pathname === href || (href !== "/" &
       justify-content:space-between;
       gap:1rem;
       padding:0.75rem 1rem;
+      flex-wrap: wrap;              /* key: prevents horizontal overflow */
+      }
+
+      .nav{
+        display:flex;
+        align-items:center;
+        gap:0.75rem;
+        flex-wrap: wrap;              /* key: allow nav items to wrap */
+        justify-content: flex-end;
+      }
+
+      :global(.site-header .nav .nav-btn){
+        display:inline-flex;
+        align-items:center;
+        gap:0.55rem;
+        padding:0.55rem 0.85rem;
+        border-radius: 999px / 70%;
+        text-decoration:none;
+        color: inherit;
+
+        background: transparent;
+        border: 1px solid transparent;
+        box-shadow: none;
+        opacity: 0.92;
+
+        transition: transform 120ms ease, background 120ms ease, box-shadow 120ms ease,
+                    border-color 120ms ease, opacity 120ms ease;
+        white-space: nowrap;          /* keep icon+label together */
+      }
+
+      :global(.site-header .nav .nav-btn:hover),
+      :global(.site-header .nav .nav-btn:focus-visible){
+        transform: translateY(-1px);
+        opacity: 1;
+        background: rgba(0,0,0,0.08);
+        border-color: rgba(0,0,0,0.14);
+        box-shadow: 0 6px 18px rgba(0,0,0,0.10);
+        outline: none;
+      }
+
+      :global(.site-header .nav .nav-btn.is-active){
+        opacity: 1;
+        background: rgba(0,0,0,0.10);
+        border-color: rgba(0,0,0,0.18);
+        box-shadow: 0 0 0 2px rgba(0,0,0,0.10) inset;
+        font-weight: 600;
+      }
+
+      /* --- Mobile: smaller tabs + no hover affordance needed --- */
+      @media (max-width: 640px){
+        .site-header{
+          padding: 0.6rem 0.75rem;
+          gap: 0.5rem;
+        }
+
+        .nav{
+          gap: 0.35rem;
+          justify-content: flex-start; /* usually feels better on mobile */
+          width: 100%;
+        }
+
+        :global(.site-header .nav .nav-btn){
+          padding: 0.38rem 0.55rem;
+          gap: 0.35rem;
+          font-size: 0.95rem;
+          border-radius: 16px;
+        }
+
+        :global(.site-header .nav .nav-btn i){
+          font-size: 0.95em;
+        }
+
+        /* On touch devices, hover can get “stuck”; just neutralize it */
+        :global(.site-header .nav .nav-btn:hover){
+          transform: none;
+          background: transparent;
+          border-color: transparent;
+          box-shadow: none;
+          opacity: 1;
+        }
+      }
+      .site-header{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:1rem;
+      padding:0.75rem 1rem;
       }
 
       .nav{
