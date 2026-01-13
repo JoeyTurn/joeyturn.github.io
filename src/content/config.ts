@@ -14,6 +14,7 @@ const blog = defineCollection({
             label: z.string(),                // e.g., "arXiv", "GitHub", "Site"
             url: z.string(),                  // we’ll normalize to https:// if needed
         })).optional(),
+        tagline: z.enum(["research", "notes"]).default("research"),
   }),
 });
 

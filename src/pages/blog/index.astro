@@ -1,14 +1,43 @@
 ---
 import BaseLayout from "../../layouts/BaseLayout.astro";
-import { getCollection } from "astro:content";
-const posts = (await getCollection("blog"))
-  .filter(p => !p.data.draft && !p.data.onlylink)
-  .sort((a,b)=>(b.data.pubDate?.getTime?.() ?? 0)-(a.data.pubDate?.getTime?.() ?? 0));
+import { getCollection, type CollectionEntry } from "astro:content";
+type BlogEntry = CollectionEntry<"blog">;
+
+const posts = await getCollection("blog", ({ data }) => !data.draft && !data.onlylink);
+
+const sortByDateDesc = (a: BlogEntry, b: BlogEntry) =>
+  (b.data.pubDate?.getTime?.() ?? 0) - (a.data.pubDate?.getTime?.() ?? 0);
+
+const researchPosts = posts
+  .filter(p => (p.data.tagline ?? "research") === "research")
+  .sort(sortByDateDesc);
+
+const notePosts = posts
+  .filter(p => p.data.tagline === "notes")
+  .sort(sortByDateDesc);
 ---
+
 <BaseLayout title="Joey Turnbull - Blog">
   <h1>Blog</h1>
+  <!-- <pre>
+{JSON.stringify(posts.map(p => ({ slug: p.slug, tagline: p.data.tagline, draft: p.data.draft })), null, 2)}
+</pre> -->
+
+  <h2>Research</h2>
+  These posts are centered around ideas/results I've found from working with neural networks. I'm working developing some of the idea in more depth,
+  with others being one-offs that belonged more naturally here than written up formally.
   <ul>
-    {posts.map(({ slug, data }) => (
+    {researchPosts.map(({ slug, data }) => (
+      <li><a href={`/blog/${slug}/`}>{data.title}</a></li>
+    ))}
+  </ul>
+
+  <hr class="section-hr" />
+
+  <h2>Notes</h2>
+  These are posts adjacent to my research, but don't contain any math. Most are about what it's like to do research in my field!
+  <ul>
+    {notePosts.map(({ slug, data }) => (
       <li><a href={`/blog/${slug}/`}>{data.title}</a></li>
     ))}
   </ul>

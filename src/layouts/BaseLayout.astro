@@ -1,6 +1,8 @@
 ---
 import "katex/dist/katex.min.css";
 const { title = "Joey Turnbull", noindex = false } = Astro.props;
+const pathname = Astro.url.pathname;
+const isActive = (href: string): boolean => pathname === href || (href !== "/" && pathname.startsWith(href + "/"));
 ---
 <html lang="en">
   <head>
@@ -53,14 +55,30 @@ const { title = "Joey Turnbull", noindex = false } = Astro.props;
         .references a { word-break: break-word; }
 
     </style>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"
+      referrerpolicy="no-referrer"
+    />
   </head>
   <body>
     <header>
       <a href="/">Joey Turnbull</a>
-      <nav>
-        <a href="/projects">Projects</a>
-        <a href="/blog">Blog</a>
-        <a href="/personal">Personal</a>
+       <nav class="nav">
+        <a class={`nav-btn ${isActive("/projects") ? "is-active" : ""}`} href="/projects">
+          <i class="fas fa-folder-open" aria-hidden="true"></i>
+          <span>Projects</span>
+        </a>
+
+        <a class={`nav-btn ${isActive("/blog") ? "is-active" : ""}`} href="/blog">
+          <i class="fas fa-pen-nib" aria-hidden="true"></i>
+          <span>Blog</span>
+        </a>
+
+        <a class={`nav-btn ${isActive("/personal") ? "is-active" : ""}`} href="/personal">
+          <i class="fas fa-user" aria-hidden="true"></i>
+          <span>Personal</span>
+        </a>
       </nav>
     </header>
     <main>

@@ -1,10 +1,22 @@
 ---
 import BaseLayout from "../layouts/BaseLayout.astro";
-import { getCollection } from "astro:content";
-
-const blog = (await getCollection("blog")).filter(p => !p.data.draft);
+import { getCollection, type CollectionEntry } from "astro:content";
+type BlogEntry = CollectionEntry<"blog">;
 const projects = (await getCollection("projects")).filter(p => !p.data.draft);
 const norm = (u:string) => /^https?:\/\//i.test(u) ? u : `https://${u}`;
+
+const blog = await getCollection("blog", ({ data }) => !data.draft && !data.onlylink);
+
+const sortByDateDesc = (a: BlogEntry, b: BlogEntry) =>
+  (b.data.pubDate?.getTime?.() ?? 0) - (a.data.pubDate?.getTime?.() ?? 0);
+
+const researchPosts = blog
+  .filter(p => (p.data.tagline ?? "research") === "research")
+  .sort(sortByDateDesc);
+
+const notePosts = blog
+  .filter(p => p.data.tagline === "notes")
+  .sort(sortByDateDesc);
 ---
 <BaseLayout>
 	<h1>Joey Turnbull</h1>
@@ -53,10 +65,21 @@ const norm = (u:string) => /^https?:\/\//i.test(u) ? u : `https://${u}`;
 	<!-- <p>(Currently being worked on, please check back later.)</p> -->
 	<!-- <hr class="section-hr" /> -->
 	<ul>
-		{blog.map(({ slug, data }) => (
+		{researchPosts.map(({ slug, data }) => (
 		<li><a href={`/blog/${slug}/`}>{data.title}</a></li>
 		))}
 	</ul>
+	<h4>Blog - Notes</h4>
+	<ul>
+		{notePosts.map(({ slug, data }) => (
+		<li><a href={`/blog/${slug}/`}>{data.title}</a></li>
+		))}
+	</ul>
+	<!-- <ul>
+		{blog.map(({ slug, data }) => (
+		<li><a href={`/blog/${slug}/`}>{data.title}</a></li>
+		))}
+	</ul> -->
 
 	<!-- <ul>
 		{projects.map(({ slug, data }) => (
