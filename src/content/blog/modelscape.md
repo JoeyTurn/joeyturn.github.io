@@ -13,20 +13,18 @@ links:
 
 # Introduction + Using
 
-I made [**modelscape**](https://github.com/JoeyTurn/modelscape), a repo extending [**MLPscape**](https://github.com/JoeyTurn/MLPscape). This repo allows for quick iteration of ML experiments without the hassle of needing to change the trainloop, a massive list of for loops, worrying about .py vs .ipynb differences, multiprocessing, and so on!
+I made [**modelscape**](https://github.com/JoeyTurn/modelscape), a repo extending [**MLPscape**](https://github.com/JoeyTurn/MLPscape). This repo allows for quick iteration of ML experiments without the hassle of needing to change the trainloop, a massive list of for loops defining what gets iterated over, worrying about .py vs .ipynb differences, multiprocessing, offline vs online training, and so on!
 
-In this post, I'll detail the updates I've made to create `modelscape`, then will describe what got carried over from `MLPscape` in case you've already used it.
+In this post, I'll give a detailed overview of what modelscape is and how to use it. If you've used MLPscape in the past, then the one line update is that the ML model, optimizer, and loss function can be defined dynamically.
 
-# New in Modelscape 
+# Using modelscape
 
-
-# Previous usage carried over from MLPscape
-
-If you've used & understood how to use MLPscape, feel free to skip this section! Otherwise, this is a rundown of the main functionality of `modelscape`.
+Everything in modelscape is fairly modular: you can define what model, dataset, optimizer and loss to use, in addition to deciding whether it should be trained offline or online, and with or without multiprocessing. Variables can be defined through a config or by using the command-line, and the entire training can be tracked if wanted.
 
 To use *modelscape*, simply follow one of the provided notebooks/python files in the `examples` folder! Typically, your file will look something roughly along the lines of
 
 - Imports
+- Your model/loss fn/optimizer defined
 - Your model grabs definitions
 - Hyperparameter specification
 - Iterator specification
@@ -36,21 +34,24 @@ To use *modelscape*, simply follow one of the provided notebooks/python files in
 - Trainloop execution
 - Results
 
-where most of the code powering *MLPscape* is hidden away in what I call the backend, which handles multiprocessing, the trainloop which runs any functions throughout, and so on. Let's run through each step, just as a reference to come back to in case anything goes wrong:
+where most of the code powering *modelscape* is hidden away in what I call the backend, which handles multiprocessing, the trainloop which runs any functions throughout, and so on. Let's run through each step, just as a reference to come back to in case anything goes wrong:
 
 ## Imports
 
-This is quite standard, with the only things that really need attention being importing the trainloop, and the arguments creators (parse_args for .py or base_args for .ipynb; as well as build_other_grabs):
+This is quite standard, with the only things that really need attention being importing the trainloop, and the arguments creators (parse_args for .py or base_args for .ipynb):
 
 ```python
 import numpy as np
 import torch
 
 import torch.multiprocessing as mp
-from modelscape.backend.cli import parse_args, base_args, build_other_grabs
+from modelscape.backend.cli import parse_args, base_args, parse_args
 from modelscape.backend.job_iterator import main as run_job_iterator
-from modelscape.backend.utils import ensure_torch
 ```
+
+## Your model/loss function/optimizer definitions
+
+Here (or in another .py file), have your model/custom loss function/custom optimizer defined! We'll let modelscape know how to use it within the **hyperparameter selection** section.
 
 ## Your MLP grabs definitions
 
@@ -67,9 +68,14 @@ def my_mlp_grab(model, X_tr, y_tr, **kwargs):
 
 We'll start here by taking in the default args, and changing whatever we don't want! A list of the default arguments can be found at the bottom of this post, and in the README of the repo.
 
+Here's also where we want to define the model/loss/optimizer being used! Of course, these can be pytorch defaults like `torch.optim.Adam` for the optimizer and `args.LOSS_CLASS = nn.CrossEntropyLoss` for the loss. See `examples/example_resnet_run.py` for more detail.
 
 ```python
 args = parse_args() OR base_args()
+
+args.MODEL_CLASS = YourModel
+args.OPTIMIZER_CLASS = YourOptimizer
+args.LOSS_CLASS = YourLoss
 
 args.ONLINE = False
 args.N_TRAIN=4000
@@ -129,15 +135,10 @@ bfn_config = dict(base_bfn=your_bfn, *other_args)
 We're almost to running the trainloop, we just need to include a global_config that gets used everywhere, which roughly takes the form of:
 
 ```python
-global_config = dict(DEPTH=args.DEPTH, WIDTH=args.WIDTH, LR=args.LR, GAMMA=args.GAMMA,
-    EMA_SMOOTHER=args.EMA_SMOOTHER, MAX_ITER=args.MAX_ITER,
-    LOSS_CHECKPOINTS=args.LOSS_CHECKPOINTS, N_TEST=args.N_TEST,
-    SEED=args.SEED, ONLYTHRESHOLDS=args.ONLYTHRESHOLDS, DIM=dim,
-    ONLINE=args.ONLINE, VERBOSE=args.VERBOSE
-    )
+global_config = args.__dict__.copy()
 ```
 
-and also we'll want to make sure we get any grabs throughout the trainloop:
+Also, we'll want to make sure we get any grabs throughout the trainloop:
 
 ```python
 grabs.update({"my_mlp_grab": my_mlp_grab})
