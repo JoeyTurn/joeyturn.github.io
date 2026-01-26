@@ -2,7 +2,7 @@
 title: Rundown of "Predicting Kernel Regression Learning Curves from only Raw Data Statistics" - the HEA
 pubDate: "2025-12-23"
 description: "On real data, we know how kernel regression performs."
-frontpagedescription: "We solve the HEA"
+frontpagedescription: "We found a general, interpretable solution to kernels like the ReLU NTK on image datasets!"
 links:
   - { label: "arXiv",  url: "http://arxiv.org/abs/2510.14878" }
   - { label: "GitHub", url: "https://github.com/JoeyTurn/hermite-eigenstructure-ansatz" }

@@ -6,7 +6,19 @@ const items = (await getCollection("projects"))
   .sort((a,b)=>(b.data.pubDate?.getTime?.() ?? 0)-(a.data.pubDate?.getTime?.() ?? 0));
 ---
 <BaseLayout title="Joey Turnbull - Projects">
-  <h1>Projects</h1>
+  <h1>Research</h1>
+  <hr />
+  Ask anyone (including an LLM) how a frontier AI model works, how they arrive at their predictions, and you'll be met with one of two answers: "I don't know" or "it's a statistical algorithm reproducing what it saw in its training data."
+  If you're like me, neither of those answers actually says <i>why</i> the models work, just <i>that</i> they do.
+  What's actually going on inside these models?
+  If they're reproducing patterns in the data they saw during training, which ones? And just exactly <i>how</i>?
+  <br><br>
+  I generally want to understand how neural networks learn.
+  I believe this understanding comes from descriptions of simple models (which I will explain in a future blogpost), more specifically on their optimization dynamics and how they create features.
+  <br><br>
+  As an early-stage PhD student, a lot of my work is still unpublished, I will try to update this page whenever I have a new preprint.
+
+  <hr />
   <ul>
     {items.map(({ slug, data }) => (
       <li><a href={`/projects/${slug}/`}>{data.title}</a></li>

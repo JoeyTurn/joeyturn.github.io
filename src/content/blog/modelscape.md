@@ -1,26 +1,33 @@
 ---
-title: MLP experiment repo released!
-pubDate: "2025-12-12"
-description: "Training MLPs can be simple... up until you want to look at things other than the loss and your code gets bloated. But no more!"
-frontpagedescription: I made a repo that makes training MLPs quite simple!
+title: Machine learning mega training experiment repo released!
+pubDate: "2026-01-26"
+description: "Training models now made much simpler!"
+frontpagedescription: I made a repo that makes training *any* ML model simple!
 series: "Repo Release"
-seriesOrder: 1
+seriesOrder: 2
 draft: False
 onlylink: False
 links:
-  - { label: "Link to Repo on GitHub", url: "https://github.com/JoeyTurn/MLPscape" }
+  - { label: "Link to Repo on GitHub", url: "https://github.com/JoeyTurn/modelscape" }
 ---
 
 # Introduction + Using
 
-I made [**MLPscape**](https://github.com/JoeyTurn/MLPscape), a repo for being able to iterate quickly on MLP experiments without the hassle of needing to change the trainloop, a massive list of for loops, worrying about .py vs .ipynb differences, multiprocessing, and so on!
+I made [**modelscape**](https://github.com/JoeyTurn/modelscape), a repo extending [**MLPscape**](https://github.com/JoeyTurn/MLPscape). This repo allows for quick iteration of ML experiments without the hassle of needing to change the trainloop, a massive list of for loops, worrying about .py vs .ipynb differences, multiprocessing, and so on!
 
-**Note** Please have Dhruva Karkada's [mupify](https://github.com/dkarkada/mupify/tree/main) and [experiment core](https://github.com/dkarkada/expt-core/tree/main) installed and in the path. I've never needed a model to be in SP, so I default to MuP + rescaling if we want to get into a lazy regime; experiment core is used for saving and grabbing results at the end.
+In this post, I'll detail the updates I've made to create `modelscape`, then will describe what got carried over from `MLPscape` in case you've already used it.
 
-To use *MLPscape*, simply follow one of the provided notebooks/python files in the `examples` folder! Typically, your file will look something roughly along the lines of
+# New in Modelscape 
+
+
+# Previous usage carried over from MLPscape
+
+If you've used & understood how to use MLPscape, feel free to skip this section! Otherwise, this is a rundown of the main functionality of `modelscape`.
+
+To use *modelscape*, simply follow one of the provided notebooks/python files in the `examples` folder! Typically, your file will look something roughly along the lines of
 
 - Imports
-- Your MLP grabs definitions
+- Your model grabs definitions
 - Hyperparameter specification
 - Iterator specification
 - Data selection
@@ -40,9 +47,9 @@ import numpy as np
 import torch
 
 import torch.multiprocessing as mp
-from MLPscape.backend.cli import parse_args, base_args, build_other_grabs
-from MLPscape.backend.job_iterator import main as run_job_iterator
-from MLPscape.backend.utils import ensure_torch
+from modelscape.backend.cli import parse_args, base_args, build_other_grabs
+from modelscape.backend.job_iterator import main as run_job_iterator
+from modelscape.backend.utils import ensure_torch
 ```
 
 ## Your MLP grabs definitions
@@ -73,7 +80,6 @@ args.NORMALIZED = True
 args.NUM_TRIALS = 2
 args.N_SAMPLES = [1024]
 args.GAMMA = [0.1, 1, 10]
-
 ```
 
 ## Iterator specification
@@ -164,17 +170,4 @@ torch.cuda.empty_cache()
 
 which is *really* simple!
 
-I hope this helps in your MLP experiment future!
-
-
-## Why I made this
-
-As I've been training MLPs pretty extensively ever since my most recent [paper](https://arxiv.org/abs/2510.14878), I kept running into the same sort of problem: there were just too many knobs I wanted to change and really get an understanding for! There were times when I wanted to make changes within the trainloop to look at different parts of the network, there were times when I felt like the trainloop itself was simply not doing what I wanted (the loss not decreasing), I wanted to switch back and forth from online and offline learning, I would occasionally need to update my outer for loops to make sure I could sweep over all the hyperparameters I was looking at, I wanted to change my dataset which was interacting poorly with a random scaling I set in some downstream file, and at the end of it all, I needed to convert from a Jupyter notebook into a Python file, before I (accidentally) short-circuited a node's power supply due to intense GPU loads, forcing me to take everything back into a Jupyter notebook!
-
-Short to say, after the push to meet the ICLR deadline, I began gradually making changes to my MLP codebase so I wouldn't encounter the same problems in the future. My original plan wasn't to fix *everything*, just enough to where I didn't need to modify the trainloop to get any particular quantities during training. Though the longer I waited, the more I saw the potential in having a more general codebase that could adapt to any setting I wanted. The result: *MLPscape*.
-
-
-## Future Plans
-
-+ ~~Surprisingly, there aren't *too* many actual direct ties to MLPs. A lot of the work here was model-agnostic, so I don't imagine it will be too dificult to make this into a more general **modelscape** repo.~~ Modelscape has been released!
-+ If there are other specific things that you feel should be added, feel free to send a message! I'll try to see if it has a place within *MLPscape* and if my CS skills are up to par with including it!
+I hope this helps in your model experimenting future!
