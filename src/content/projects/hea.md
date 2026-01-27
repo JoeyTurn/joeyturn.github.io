@@ -11,7 +11,7 @@ authors:
   - { name: "Dhruva*", url: "https://dkarkada.xyz" }
   - { name: "Yuxi", url: "https://yuxi.ml" }
   - { name: "Jamie", url: "https://james-simon.github.io/" }
-series: "HEA"
+series: "Kernel Regression"
 seriesOrder: 1
 katexMacros:
   "\\valpha": "{\\bm{\\alpha}}"

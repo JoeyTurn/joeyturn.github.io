@@ -1,10 +1,46 @@
 ---
 import BaseLayout from "../../layouts/BaseLayout.astro";
-import { getCollection } from "astro:content";
+import { getCollection, type CollectionEntry } from "astro:content";
 const items = (await getCollection("projects"))
   .filter(p => !p.data.draft && !p.data.onlylink)
   .sort((a,b)=>(b.data.pubDate?.getTime?.() ?? 0)-(a.data.pubDate?.getTime?.() ?? 0));
+type ProjectEntry = CollectionEntry<"projects">; // <-- change if your collection name differs
+const sortByDateDesc = (a: ProjectEntry, b: ProjectEntry) =>
+  (b.data.pubDate?.getTime?.() ?? 0) - (a.data.pubDate?.getTime?.() ?? 0);
+const projects = items.sort(sortByDateDesc);
+
+const fmtDate = (d?: Date) =>
+  d ? d.toLocaleDateString(undefined, { year: "numeric", month: "short", day: "2-digit" }) : "";
+
+function groupBySeries<T extends { data: any }>(arr: T[], fallbackLabel: string) {
+  const m = new Map<string, T[]>();
+  for (const p of arr) {
+    const raw = p.data.series;
+    const key =
+      typeof raw === "string" && raw.trim().length > 0 ? raw.trim() : fallbackLabel;
+    if (!m.has(key)) m.set(key, []);
+    m.get(key)!.push(p);
+  }
+  const keys = Array.from(m.keys()).sort((a, b) => {
+    if (a === fallbackLabel) return 1;
+    if (b === fallbackLabel) return -1;
+    return a.localeCompare(b);
+  });
+  return keys.map((k) => ({ series: k, items: m.get(k)! }));
+}
+
+function hueFromString(s: string) {
+  let h = 0;
+  for (let i = 0; i < s.length; i++) h = (h * 31 + s.charCodeAt(i)) >>> 0;
+  return h % 360;
+}
+
+const groups = groupBySeries(projects, "Misc").map((g) => ({
+  ...g,
+  hue: hueFromString(g.series),
+}));
 ---
+
 <BaseLayout title="Joey Turnbull - Projects">
   <h1>Research</h1>
   <hr />
@@ -19,10 +55,212 @@ const items = (await getCollection("projects"))
   As an early-stage PhD student, a lot of my work is still unpublished, I will try to update this page whenever I have a new preprint.
 
   <hr />
-  <ul>
-    {items.map(({ slug, data }) => (
-      <li><a href={`/projects/${slug}/`}>{data.title}</a></li>
-    ))}
-  </ul>
+    <main class="grid">
+      {groups.map((g) => (
+        <details class="series-card" style={`--h:${g.hue};`} open>
+          <summary class="series-summary">
+            <span class="chev" aria-hidden="true">▾</span>
+            <span class="series-name">{g.series}</span>
+            <span class="series-count">{g.items.length}</span>
+          </summary>
+
+          <ul class="item-list">
+            {g.items.map(({ slug, data }) => (
+              <li class="item">
+                <details class="item-details" name={`series-${g.series}`}>
+                  <summary class="item-summary">
+                    <span class="tri" aria-hidden="true">▸</span>
+                    <span class="item-title">{data.title}</span>
+                    {data.pubDate && <span class="item-date">{fmtDate(data.pubDate)}</span>}
+                  </summary>
+
+                  <div class="item-body">
+                    {data.description && <p class="item-desc">{data.description}</p>}
+
+                    <div class="item-links">
+                      <a class="primary" href={`/projects/${slug}/`}>Open →</a>
+
+                      {/* Optional frontmatter links if you have them */}
+                      {data.link && (
+                        <a class="muted" href={data.link} rel="noopener noreferrer" target="_blank">
+                          External ↗
+                        </a>
+                      )}
+                      {data.repo && (
+                        <a class="muted" href={data.repo} rel="noopener noreferrer" target="_blank">
+                          Repo ↗
+                        </a>
+                      )}
+                    </div>
+                  </div>
+                </details>
+              </li>
+            ))}
+          </ul>
+        </details>
+      ))}
+    </main>
+  </div>
+
+  <style>
+    /* If you want the page tan like before, keep these; otherwise delete. */
+    :global(html), :global(body) { background: #efe6d6; }
+
+    .projects {
+      max-width: 980px;
+      margin: 0 auto;
+      padding: 2.25rem 1.25rem 3rem;
+    }
+
+    .hero { margin-bottom: 1.25rem; }
+    .title {
+      font-size: clamp(2rem, 3vw, 2.8rem);
+      line-height: 1.05;
+      margin: 0 0 0.5rem;
+      letter-spacing: -0.02em;
+    }
+    .subtitle { margin: 0; opacity: 0.8; max-width: 70ch; }
+
+    .grid {
+      display: grid;
+      gap: 1rem;
+    }
+
+    /* === Series card with colored border === */
+    .series-card {
+      border-radius: 16px;
+      border: 1px solid rgba(0,0,0,0.12);
+      background: rgba(255,255,255,0.20);
+      position: relative;
+      overflow: hidden;
+    }
+    /* colored border accent; hue comes from --h */
+    .series-card::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      border-left: 8px solid hsl(var(--h) 70% 55% / 0.65);
+      border-top: 1px solid hsl(var(--h) 70% 55% / 0.20);
+      border-bottom: 1px solid hsl(var(--h) 70% 55% / 0.20);
+      pointer-events: none;
+    }
+
+    summary.series-summary {
+      display: grid;
+      grid-template-columns: 1.2rem 1fr auto;
+      align-items: baseline;
+      gap: 0.6rem;
+      cursor: pointer;
+      user-select: none;
+      padding: 0.9rem 1rem 0.85rem;
+      list-style: none;
+      position: relative;
+    }
+    summary.series-summary::-webkit-details-marker { display: none; }
+
+    .chev {
+      display: inline-block;
+      transform: translateY(-1px);
+      opacity: 0.75;
+      transition: transform 140ms ease;
+    }
+    details.series-card[open] .chev {
+      transform: rotate(180deg) translateY(1px);
+      opacity: 0.9;
+    }
+
+    .series-name {
+      font-weight: 800;
+      letter-spacing: -0.01em;
+      font-size: 1.15rem;
+    }
+    .series-count {
+      opacity: 0.65;
+      font-size: 0.95rem;
+      padding-left: 0.5rem;
+    }
+
+    .item-list {
+      margin: 0;
+      padding: 0 0.75rem 0.85rem;
+      list-style: none;
+    }
+
+    .item {
+      border-top: 1px solid rgba(0,0,0,0.10);
+      padding: 0.2rem 0;
+    }
+
+    /* Item dropdown */
+    details.item-details { padding: 0; }
+
+    summary.item-summary {
+      display: grid;
+      grid-template-columns: 1.25rem 1fr auto;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.75rem 0.25rem;
+      cursor: pointer;
+      user-select: none;
+      list-style: none;
+    }
+    summary.item-summary::-webkit-details-marker { display: none; }
+
+    .tri {
+      display: inline-block;
+      transform: translateY(-1px);
+      opacity: 0.8;
+      transition: transform 140ms ease;
+    }
+    details.item-details[open] .tri {
+      transform: rotate(90deg) translateX(1px);
+      opacity: 0.95;
+    }
+
+    .item-title { font-size: 1.08rem; line-height: 1.2; }
+    .item-date {
+      opacity: 0.65;
+      font-size: 0.95rem;
+      white-space: nowrap;
+      padding-left: 0.75rem;
+    }
+
+    .item-body {
+      padding: 0 0.25rem 0.85rem 1.75rem;
+      max-width: 80ch;
+    }
+    .item-desc { margin: 0.25rem 0 0.7rem; opacity: 0.85; }
+
+    .item-links {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.75rem;
+      align-items: center;
+    }
+
+    .primary {
+      text-decoration: none;
+      font-weight: 700;
+      border-bottom: 1px solid transparent;
+    }
+    .primary:hover { border-bottom-color: currentColor; }
+
+    .muted {
+      text-decoration: none;
+      opacity: 0.75;
+      border-bottom: 1px solid transparent;
+    }
+    .muted:hover { opacity: 0.95; border-bottom-color: currentColor; }
+
+    @media (max-width: 560px) {
+      summary.item-summary {
+        grid-template-columns: 1.25rem 1fr;
+      }
+      .item-date { display: none; }
+      .item-body { padding-left: 1.5rem; }
+      .item-list { padding-left: 0.6rem; padding-right: 0.6rem; }
+    }
+  </style>
 </BaseLayout>
+
 

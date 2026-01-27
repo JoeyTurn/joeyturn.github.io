@@ -9,6 +9,8 @@
     "astro": "astro"
   },
   "dependencies": {
+    "@astrojs/mdx": "^4.3.13",
+    "@tensorflow/tfjs": "^4.22.0",
     "astro": "^5.14.3",
     "citation-js": "^0.7.20",
     "katex": "^0.16.23",

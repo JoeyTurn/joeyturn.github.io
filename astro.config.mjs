@@ -6,6 +6,7 @@ import rehypeCitationOutlinks from "./src/lib/rehype-citation-outlinks.js";
 import remarkCitep from "./src/lib/remark-citep.js";
 import remarkFootnotes from "remark-footnotes";
 import katexPerPage from "./src/lib/rehype-katex-per-page.js";
+import mdx from "@astrojs/mdx";
 
 export default defineConfig({
   site: "http://localhost:4321",
@@ -29,4 +30,5 @@ export default defineConfig({
       [rehypeCitationOutlinks, { bibliography: "src/content/refs.bib" }],
     ],
   },
+  integrations: [mdx()],
 });

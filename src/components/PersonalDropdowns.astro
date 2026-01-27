@@ -1,0 +1,65 @@
+<div class="dropdowns">
+  <details class="dropdown">
+    <summary>Weightlifting</summary>
+    <div class="dropdown-body">
+      <p>To be worked on...</p>
+    </div>
+  </details>
+
+  <details class="dropdown">
+    <summary>Poetry</summary>
+    <div class="dropdown-body">
+      <p>To be worked on...</p>
+    </div>
+  </details>
+
+  <details class="dropdown">
+    <summary>Teas</summary>
+    <div class="dropdown-body">
+      <p>To be worked on...</p>
+    </div>
+  </details>
+</div>
+
+<style>
+  .dropdowns{
+    margin-top: 1rem;
+    display: grid;
+    gap: 0.75rem;
+    max-width: 48rem;
+  }
+
+  .dropdown{
+    border: 1px solid rgba(0,0,0,0.12);
+    border-radius: 16px;
+    padding: 0.25rem 0.75rem;
+    background: rgba(0,0,0,0.03);
+  }
+
+  .dropdown > summary{
+    cursor: pointer;
+    list-style: none;
+    padding: 0.5rem 0;
+    font-weight: 600;
+    outline: none;
+  }
+
+  .dropdown > summary::-webkit-details-marker{
+    display: none;
+  }
+
+  .dropdown > summary::after{
+    content: "▾";
+    float: right;
+    opacity: 0.7;
+    transition: transform 120ms ease;
+  }
+
+  .dropdown[open] > summary::after{
+    transform: rotate(180deg);
+  }
+
+  .dropdown-body{
+    padding: 0.25rem 0 0.75rem 0;
+  }
+</style>

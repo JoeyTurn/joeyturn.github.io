@@ -1,6 +1,7 @@
 ---
 import BaseLayout from "../../layouts/BaseLayout.astro";
 import { getCollection } from "astro:content";
+import PersonalDropdowns from "../../components/PersonalDropdowns.astro";
 const posts = (await getCollection("blog")).filter(p => !p.data.draft);
 ---
 <BaseLayout title="Joey Turnbull - Personal">
@@ -10,5 +11,8 @@ const posts = (await getCollection("blog")).filter(p => !p.data.draft);
       <li><a href={`/personal/${slug}/`}>{data.title}</a></li>
     ))}
   </ul> -->
-  <p>Come back later for more details!</p>
+  Hi! I'm putting a potpourri of non-reasearch thoughts/updates/more personal items here!
+
+  <PersonalDropdowns />
+
 </BaseLayout>
