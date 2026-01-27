@@ -1,5 +1,5 @@
 // src/mlp-trainer/mount.js
-import { trainMLP, GRAB_TARGETS } from "./trainer.js";
+import { trainMLP, GRAB_TARGETS } from "/src/mlp-trainer/trainer.js";
 
 function el(tag, attrs = {}, ...kids) {
   const n = document.createElement(tag);

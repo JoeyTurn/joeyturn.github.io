@@ -32,7 +32,4 @@ export default defineConfig({
   },
   integrations: [mdx()],
   base: "",
-  vite: {
-    base: "./",
-  },
 });

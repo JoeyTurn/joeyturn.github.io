@@ -1,5 +1,5 @@
 // src/mlp-trainer/boot.js
-import { mountMLPTrainer } from "./mount.js";
+import { mountMLPTrainer } from "/src/mlp-trainer/mount.js";
 
 function boot() {
   const nodes = document.querySelectorAll("[data-mlp-trainer]");
