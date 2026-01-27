@@ -31,7 +31,7 @@ export default defineConfig({
     ],
   },
   integrations: [mdx()],
-  base: "/blog/mlp_train_widget",
+  base: "",
   vite: {
     build: {
       assetsInlineLimit: 0, // <-- prevents data: URLs for small JS assets
