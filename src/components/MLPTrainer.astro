@@ -1,13 +1,14 @@
 ---
 import bootUrl from "../mlp-trainer/boot.js?url";
 
-const base = import.meta.env.BASE_URL ?? "/";
-const baseNoTrail = base.endsWith("/") ? base.slice(0, -1) : base;
+const BASE = import.meta.env.BASE_URL ?? "/";
 
-// bootUrl often starts with "/...". Prefix it with BASE_URL so it works on GH Pages subpaths.
-const bootSrc = bootUrl.startsWith("/")
-  ? `${baseNoTrail}${bootUrl}`
-  : `${baseNoTrail}/${bootUrl}`;
+// If bootUrl is already a full URL (data:, http:, https:), don't prefix it.
+const hasScheme = /^[a-zA-Z][a-zA-Z0-9+.-]*:/.test(bootUrl);
+
+const bootSrc = hasScheme
+  ? bootUrl
+  : `${BASE}${bootUrl.replace(/^\//, "")}`;
 ---
 
 <div
