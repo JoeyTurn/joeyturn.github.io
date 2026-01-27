@@ -70,6 +70,8 @@ We'll start here by taking in the default args, and changing whatever we don't w
 
 Here's also where we want to define the model/loss/optimizer being used! Of course, these can be pytorch defaults like `torch.optim.Adam` for the optimizer and `args.LOSS_CLASS = nn.CrossEntropyLoss` for the loss. See `examples/example_resnet_run.py` for more detail.
 
+**Note**: for custom models that don't have a defined width, or if you want the model to not be rescaled via `mupify`, please set `mup_param='sp'`.
+
 ```python
 args = parse_args() OR base_args()
 
@@ -86,6 +88,7 @@ args.NORMALIZED = True
 args.NUM_TRIALS = 2
 args.N_SAMPLES = [1024]
 args.GAMMA = [0.1, 1, 10]
+args.mup_param = 'mup'
 ```
 
 ## Iterator specification
