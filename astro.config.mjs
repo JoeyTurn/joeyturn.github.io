@@ -33,8 +33,6 @@ export default defineConfig({
   integrations: [mdx()],
   base: "",
   vite: {
-    build: {
-      assetsInlineLimit: 0, // <-- prevents data: URLs for small JS assets
-    },
+    base: "./",
   },
 });
