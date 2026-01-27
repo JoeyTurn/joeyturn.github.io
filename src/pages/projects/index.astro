@@ -81,16 +81,11 @@ const groups = groupBySeries(projects, "Misc").map((g) => ({
                       <a class="primary" href={`/projects/${slug}/`}>Open →</a>
 
                       {/* Optional frontmatter links if you have them */}
-                      {data.link && (
-                        <a class="muted" href={data.link} rel="noopener noreferrer" target="_blank">
-                          External ↗
+                      {data.links && data.links.map((link: { label: string; url: string }) => (
+                        <a class="muted" href={link.url} rel="noopener noreferrer" target="_blank">
+                          {link.label} ↗
                         </a>
-                      )}
-                      {data.repo && (
-                        <a class="muted" href={data.repo} rel="noopener noreferrer" target="_blank">
-                          Repo ↗
-                        </a>
-                      )}
+                      ))}
                     </div>
                   </div>
                 </details>

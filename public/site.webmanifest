@@ -1,0 +1,9 @@
+{
+  "name": "Joey Turnbull",
+  "short_name": "JoeyTurn",
+  "start_url": ".",
+  "display": "standalone",
+  "background_color": "#f6f3ea",
+  "theme_color": "#f6f3ea",
+  "icons": []
+}

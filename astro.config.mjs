@@ -9,7 +9,7 @@ import katexPerPage from "./src/lib/rehype-katex-per-page.js";
 import mdx from "@astrojs/mdx";
 
 export default defineConfig({
-  site: "http://localhost:4321",
+  // site: "http://localhost:4321",
   markdown: {
     remarkPlugins: [
       remarkMath,
@@ -31,7 +31,8 @@ export default defineConfig({
     ],
   },
   integrations: [mdx()],
-  base: "",
+  site: "https://joeyturn.github.io",
+  base: "/blog/mlp_train_widget",
   vite: {
     build: {
       assetsInlineLimit: 0, // <-- prevents data: URLs for small JS assets
