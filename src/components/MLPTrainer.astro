@@ -1,5 +1,5 @@
 ---
-import bootUrl from "../mlp-trainer/boot.js?url";
+// No imports needed - we'll handle it client-side
 ---
 
 <div data-mlp-trainer>
@@ -17,4 +17,29 @@ import bootUrl from "../mlp-trainer/boot.js?url";
   });
 </script>
 
-<script type="module" src={bootUrl}></script>
+<script>
+  import { mountMLPTrainer } from "../mlp-trainer/mount.js";
+
+  function boot() {
+    const nodes = document.querySelectorAll("[data-mlp-trainer]");
+    for (const node of nodes) {
+      // TypeScript workaround: use any to avoid property errors
+      const nodeWithFlag = node as any;
+      if (nodeWithFlag.__mlpMounted) continue;
+      nodeWithFlag.__mlpMounted = true;
+      try {
+        mountMLPTrainer(node as HTMLElement);
+      } catch (e) {
+        console.error("[MLPTrainer] mount failed:", e);
+        const error = e as any;
+        node.innerHTML = `<pre style="color:#b00; white-space:pre-wrap;">${String(error?.stack || e)}</pre>`;
+      }
+    }
+  }
+
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", boot);
+  } else {
+    boot();
+  }
+</script>
