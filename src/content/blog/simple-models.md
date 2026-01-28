@@ -7,18 +7,13 @@ seriesOrder: 1
 draft: False
 onlylink: True
 tagline: notes
-
-# title: Feature learning networks are/become balanced
-# pubDate: "2025-10-18"
-# description: "Feature learning made simple"
-# series: "Feature Learning"
-# seriesOrder: 1
-# draft: False
-# onlylink: False
 ---
+
+When LLMs continue to surpass baselines, particularly those deemed to show PhD and beyond level reasoning, 
+the physics-y theory of learning is still focusing on much simpler systems: kernel regression, deep linear networks, word embedding models, etc. 
 
 # Inspiration
 
-Abcdefg
+
 
 # Concession
