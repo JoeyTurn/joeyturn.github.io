@@ -58,7 +58,7 @@ Rotation invariant kernels can be written mathematically as
 
 $$
 \begin{equation*}
-    K(\vec{x}, \vec{x}') = K(|\vec{x}, \vec{x}', \vec{x}^\top \vec{x}')
+    K(\vec{x}, \vec{x}') = K(||\vec{x}||, ||\vec{x}'||, \vec{x}^\top \vec{x}')
 \end{equation*}
 $$
 
