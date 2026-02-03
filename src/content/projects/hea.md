@@ -7,10 +7,10 @@ links:
   - { label: "arXiv",  url: "http://arxiv.org/abs/2510.14878" }
   - { label: "GitHub", url: "https://github.com/JoeyTurn/hermite-eigenstructure-ansatz" }
 authors:
-  - { name: "Joey*", url: "https://joeyturn.github.io/" }
-  - { name: "Dhruva*", url: "https://dkarkada.xyz" }
-  - { name: "Yuxi", url: "https://yuxi.ml" }
-  - { name: "Jamie", url: "https://james-simon.github.io/" }
+  - { name: "Joseph Turnbull*", url: "https://joeyturn.github.io/" }
+  - { name: "Dhruva Karkada*", url: "https://dkarkada.xyz" }
+  - { name: "Yuxi Liu", url: "https://yuxi.ml" }
+  - { name: "James Simon", url: "https://james-simon.github.io/" }
 series: "Kernel Regression"
 seriesOrder: 1
 katexMacros:

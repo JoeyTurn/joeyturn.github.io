@@ -5,7 +5,7 @@ description: "We care about having modern networks in the feature learning regim
 series: "Feature Learning"
 seriesOrder: 2
 draft: True
-onlylink: True
+onlylink: False
 ---
 
 The theorist has largely declared the kernel regime dead, with practitioners never really seeming to pay attention to anything regarding the kernel regime. What's the point of analyzing anything in the kernel regime?

@@ -1,5 +1,5 @@
 ---
-title: Machine learning mega training experiment repo released!
+title: "Modelscape: Machine learning mega training experiment repo released!"
 pubDate: "2026-01-26"
 description: "Training models now made much simpler!"
 frontpagedescription: I made a repo that makes training *any* ML model simple!
