@@ -1,11 +1,11 @@
 ---
-title: Kernels are data augmentation-invariant
+title: Kernels are data augmentation-invariant (on CIFAR-10)
 pubDate: "2026-02-03"
 frontpagedescription: "Kernels dislike data augments..."
 description: "Insights into data augmentation in the kernel and feature-learning regimes"
 series: "Feature Learning"
 seriesOrder: 1
-draft: False
+draft: True
 onlylink: False
 ---
 
