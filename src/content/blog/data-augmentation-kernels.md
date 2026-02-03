@@ -10,7 +10,7 @@ onlylink: False
 
 # Fundamental Understanding of Data Augmentation
 
-I would argue that there are not any results that detail <i>when</i> data augmentations are helpful, and by <i>how much</i> they will improve the performance. As kernel theory has nice theory=experiment curves, I tested out running three of the most common data augmentation techniques (rotations, random cropping, and horizontal flips) on CIFAR10 through a ReLU NTK and Convolutional NTK.
+I would argue that there are not any results that detail <i>when</i> data augmentations are helpful, and by <i>how much</i> they will improve the performance. As kernel theory has can nicely predict experimental learning curves, I tested out running three of the most common data augmentation techniques (rotations, random cropping, and horizontal flips) on CIFAR10 through a ReLU NTK and Convolutional NTK.
 
 To give the punchline early, I largely found that data augmentation is a feature-learning regime specific phenomenon!
 
