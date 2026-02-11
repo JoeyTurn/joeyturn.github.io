@@ -48,9 +48,7 @@ const personal = defineCollection({
         pubDate: z.coerce.date().optional(),
         onlylink: z.boolean().optional(),
         draft: z.boolean().optional(),
-        series: z.string().optional(),
-        seriesOrder: z.number().optional(),
-        frontpagedescription: z.string().optional(),
+        category: z.enum(["poetry", "weightlifting"]),
         description: z.string().optional(),
   }),
 });

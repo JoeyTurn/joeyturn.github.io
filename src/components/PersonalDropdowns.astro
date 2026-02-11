@@ -1,22 +1,69 @@
+---
+import { getCollection } from "astro:content";
+
+const poems = (await getCollection("personal", (p) =>
+  !p.data.draft && p.data.category === "poetry"
+)).sort((a, b) => (b.data.pubDate?.getTime() ?? 0) - (a.data.pubDate?.getTime() ?? 0));
+---
+
 <div class="dropdowns">
   <details class="dropdown">
     <summary>Weightlifting</summary>
+    These are my current PBs for some of my most common exercises; for reference, I don't weigh much (145-ish range).
+    I'll only record ones that are non-machine exercises--machine specifics make measurements unreliable.
     <div class="dropdown-body">
-      <p>To be worked on...</p>
+      <p><strong>Push</strong></p>
+      <p>Bench press — 185 x 2 (18 August, 2025)</p>
+      <p>Dumbbell bench press — 75 x 5 (31 December, 2025)</p>
+      <p>Weighted dips — +90 x 1 (22 December, 2025)</p>
+      <hr />
+      <p><strong>Pull</strong></p>
+      <p>Wide pull ups — 12 x BW (1 February, 2026)</p>
+      <p>Bicep curl — 45 x 10 (12 June, 2025)</p>
+      <hr />
+      <p><strong>Legs</strong></p>
+      <p>Squats — 225 x 1 (22 August, 2025)</p>
+      <p>Deadlift — 335 x 1 (Sometime early 2025)</p>
+      <p>Barbell lunge — 135 x 1 (15 January, 2026)</p>
+    </div>
+  </details>
+
+  <details class="dropdown">
+    <summary>Running</summary>
+    <div class="dropdown-body">
+      <p><strong>1 mile</strong> — 5:30 (9 March, 2025)</p>
+      <hr />
+      <p><strong>2 miles</strong> — 12:31+ (13 April, 2025)</p>
+      <hr />
+      <p><strong>5k</strong> — 20:00 (13 April, 2025)</p>
+      <hr />
+      <p><strong>Half marathon</strong> — 1:54:37 (12 May, 2025)</p>
+      <hr />
     </div>
   </details>
 
   <details class="dropdown">
     <summary>Poetry</summary>
     <div class="dropdown-body">
-      <p>To be worked on...</p>
+      <ul class="link-list">
+        {poems.map((p) => (
+          <li><a href={`/personal/${p.slug}/`}>{p.data.title}</a></li>
+        ))}
+      </ul>
     </div>
   </details>
 
   <details class="dropdown">
-    <summary>Teas</summary>
+    <summary>Tea</summary>
     <div class="dropdown-body">
-      <p>To be worked on...</p>
+      <p><strong>Green</strong></p>
+      <hr />
+      <p><strong>Red</strong></p>
+      <hr />
+      <p><strong>Oolong</strong></p>
+      <hr />
+      <p><strong>Black</strong></p>
+      <hr />
     </div>
   </details>
 </div>
@@ -44,9 +91,7 @@
     outline: none;
   }
 
-  .dropdown > summary::-webkit-details-marker{
-    display: none;
-  }
+  .dropdown > summary::-webkit-details-marker{ display: none; }
 
   .dropdown > summary::after{
     content: "▾";
@@ -55,11 +100,12 @@
     transition: transform 120ms ease;
   }
 
-  .dropdown[open] > summary::after{
-    transform: rotate(180deg);
-  }
+  .dropdown[open] > summary::after{ transform: rotate(180deg); }
 
-  .dropdown-body{
-    padding: 0.25rem 0 0.75rem 0;
+  .dropdown-body{ padding: 0.25rem 0 0.75rem 0; }
+
+  .link-list{
+    margin: 0.25rem 0 0 0;
+    padding-left: 1.1rem;
   }
 </style>
