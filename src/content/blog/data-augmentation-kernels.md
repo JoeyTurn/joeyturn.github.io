@@ -1,12 +1,14 @@
 ---
 title: Horizontal flips as independent samples - kernels viewpoint of data augmentation
-pubDate: "2026-03-07"
+pubDate: "2026-03-06"
 frontpagedescription: "Kernels improve only with *some* data augmentation schemes"
 description: "Insights into data augmentation in the kernel regime"
 series: "Kernels"
 seriesOrder: 1
 draft: False
 onlylink: False
+links:
+  - { label: "GitHub", url: "https://github.com/JoeyTurn/data_augments" }
 ---
 
 # Solveable models of data augmentation
