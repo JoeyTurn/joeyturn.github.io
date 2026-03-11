@@ -33,7 +33,7 @@ To give the punchline early, kernels *do* noticably improve (at least on CIFAR10
         loading="lazy" decoding="async" />
     </div>
     <figcaption style="text-align:center; font-size:0.95em; color:#666; margin-top:8px;">
-        Kernel learning curves against samples with horizontal flips data augments. There appears to be little difference between adding natural and horiontally flipped augmented samples. Results only show runs with over 200 total unaugmented samples for visual clarify. A zoomed out plot showing the standard behavior below this 200 sample threshold is included in [Appendix A](#full-view). <b>Left.</b> Learning curve for a 5 layer Myrtle-style convolutional network's NTK. <b>Right.</b> Learning curve for a 1 hidden layer ReLU MLP's NTK.
+        Kernel learning curves against samples with horizontal flips data augments. There appears to be little difference between adding natural and horiontally flipped augmented samples. Results only show runs with over 200 total unaugmented samples for visual clarify. A zoomed out plot showing the standard behavior below this 200 sample threshold is included in <a href="#fullview">Appendix A</a>. <b>Left.</b> Learning curve for a 5 layer Myrtle-style convolutional network's NTK. <b>Right.</b> Learning curve for a 1 hidden layer ReLU MLP's NTK.
   </figcaption>
 </figure>
 
@@ -213,7 +213,7 @@ It's clear there's still more work to be done here! This is not my current resea
 
 All datapoints presented in this blogpost are taken over 3 random initializations. Unless otherwise specified, all kernels are run with a ridge regularization of 0.001.
 
-<div id='full-view'>
+<div id='fullview'>
 
 The plots I've detailed have been zoomed in on the results above 200 samples; while I have train runs below 200, I don't include them to reduce visual clutter. However, the lower sample behavior doesn't change the overall narrative, as is shown below:
 
