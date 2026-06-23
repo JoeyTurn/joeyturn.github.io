@@ -12,7 +12,9 @@ onlylink: False
 # Why ICLR?
 
 From the original [ICLR](https://arxiv.org/abs/2501.00070)\citep{park2025iclrincontextlearningrepresentations} paper, I joined the other ICL theorists in being enamored with the result.
-The result--that language models could reconstruct a random walk process over a random grid, the states of which are stored in context--appeared to be qualitatively different from the standard ICL tasks that were considered before, as the model's representations never really needed to be discussed.
+Language models could reconstruct a random walk process over a random grid, the states of which are stored in context!
+This appeared to be qualitatively different from the standard ICL tasks that were considered before, as the model's representations never really needed to be discussed.
+Why was this happening? Why did the model construct the generative process within its representations? There were so many things to explore about this setup, and I was looking for some simple insight.
 
 # Minimal models
 
