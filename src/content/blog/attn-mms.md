@@ -9,6 +9,10 @@ draft: False
 onlylink: False
 ---
 
+<!-- NOTES
+From Jamie: Make the argument of things not interacting with the context more clear from a linalg perspective
+ -->
+
 # Why ICLR?
 
 From the original [ICLR](https://arxiv.org/abs/2501.00070)\citep{park2025iclrincontextlearningrepresentations} paper, I joined the other ICL theorists in being enamored with the result.
